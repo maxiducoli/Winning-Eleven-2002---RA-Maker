@@ -1,7 +1,11 @@
+using System.IO;
+using System.Media;
+
 namespace Winning_Eleven_2002___RA_Maker
 {
     public partial class Form1 : Form
     {
+        SoundPlayer player;
         public Form1()
         {
             InitializeComponent();
@@ -82,34 +86,44 @@ namespace Winning_Eleven_2002___RA_Maker
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (lstArchivos.Items.Count > 0)
+            {
+                int indice = lstArchivos.SelectedIndex;
+                object linea = lstArchivos.SelectedItem;
 
-            Wav2Vag wav2Vag = new Wav2Vag(Application.StartupPath + "Tools\\wav2vag.exe");
-            string[] parametros = new string[2] { "", "" };
-            string salida = string.Empty;
-
-            wav2Vag.ConvertirAWavVag("e:\\TEMP\\VAGS\\CONVERTID.wav",
-                "e:\\TEMP\\VAGS\\C1.vag", out salida, parametros);
-
-            if (!string.IsNullOrEmpty(salida))
-                MessageBox.Show(salida);
+                if (indice > 0)
+                {
+                    lstArchivos.Items.RemoveAt(indice);
+                    lstArchivos.Items.Insert(indice - 1, linea);
+                    lstArchivos.SelectedIndex = indice - 1;
+                }
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Wav2Vag wav2Vag = new Wav2Vag();
-            wav2Vag.ConvertirLBA("e:\\TEMP\\VAGS\\C1.vag", true);
+            if (lstArchivos.SelectedIndex < lstArchivos.Items.Count - 1)
+            {
+                int indice = lstArchivos.SelectedIndex;
+                object linea = lstArchivos.SelectedItem;
+
+                if (indice < lstArchivos.Items.Count)
+                {
+                    lstArchivos.Items.RemoveAt(indice);
+                    lstArchivos.Items.Insert(indice + 1, linea);
+                    lstArchivos.SelectedIndex = indice + 1;
+                }
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            string salida = string.Empty;
-            Wav2Vag wav2Vag = new Wav2Vag(Application.StartupPath + "Tools\\wav2vag.exe");
-            wav2Vag.ProcesarArchivo("e:\\TEMP\\VAGS\\01a26 - Hoy retransmitimos desde el estadio real.wav",
-                "01a15", out salida);
-
-            if (!string.IsNullOrEmpty(salida))
+            if (lstArchivos.Items.Count > 0)
             {
-                MessageBox.Show(salida);
+                if (MessageBox.Show("Are you sure wanna delete selected item?") == DialogResult.OK)
+                {
+                    lstArchivos.Items.RemoveAt(lstArchivos.SelectedIndex);
+                }
             }
 
         }
@@ -150,6 +164,93 @@ namespace Winning_Eleven_2002___RA_Maker
                 }
             }
 
+        }
+
+        private void lstArchivos_Click(object sender, EventArgs e)
+        {
+            Wav2Vag wav2Vag = new Wav2Vag(Application.StartupPath + "Tools\\wavInfo.exe");
+            string salida = string.Empty;
+            string[] opciones = { "-m" };
+
+
+            if (lstArchivos.Items.Count > 0)
+            {
+                string archivo = lstArchivos.SelectedItem.ToString();
+
+                if (string.IsNullOrEmpty(archivo))
+                {
+                    return;
+                }
+                else
+                {
+                    wav2Vag.WavInformation("\"" + archivo + "\"", out salida, opciones);
+                }
+                string[] strings = salida.Split('\r');
+                lstInformacionWAV.Items.Clear();
+                foreach (string s in strings)
+                {
+                    if (!s.ToUpper().Contains("ERROR"))
+                    {
+                        lstInformacionWAV.Items.Add(s);
+                    }
+                }
+            }
+        }
+
+        private void btnPlay_Click(object sender, EventArgs e)
+        {
+            if (lstArchivos.Items.Count > 0)
+            {
+
+                string archivoWav = lstArchivos.SelectedItem.ToString();
+                player = new SoundPlayer();
+                player.SoundLocation = archivoWav;
+                player.Load();
+                player.Play();
+            }
+        }
+
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            if (player != null)
+
+                player.Stop();
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            if (lstArchivos.Items.Count > 0)
+            {
+                DialogResult ok = MessageBox.Show("This will clear all wav list. Are you sure?", "Clear list", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (ok == DialogResult.Yes)
+                {
+                    lstArchivos.Items.Clear();
+                }
+            }
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+
+            if (lstArchivos.Items.Count > 0)
+            {
+                int indice = lstArchivos.SelectedIndex + 1;
+                using (OpenFileDialog openFileDialog = new OpenFileDialog())
+                {
+
+                    openFileDialog.Filter = "Archivos WAV | *.wav";
+                    openFileDialog.Title = "Agregar archivos WAV";
+                    openFileDialog.Multiselect = false;
+                    openFileDialog.DefaultExt = "wav";
+
+                    if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+
+                        lstArchivos.Items.Insert(indice, openFileDialog.FileName);
+                    }
+
+                }
+            }
         }
     }
 }

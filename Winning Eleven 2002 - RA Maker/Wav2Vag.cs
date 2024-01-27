@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 
 namespace Winning_Eleven_2002___RA_Maker
@@ -17,7 +18,8 @@ namespace Winning_Eleven_2002___RA_Maker
         }
 
         public void ConvertirAWavVag(string archivoWav, string archivoVag, out string salida, string[] opciones = null)
-        {
+         {
+            
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 //WorkingDirectory = Path.GetDirectoryName (archivoVag),
@@ -52,6 +54,45 @@ namespace Winning_Eleven_2002___RA_Maker
                 }
             }
         }
+
+        public void WavInformation(string archivoWav, out string salida, string[] opciones = null)
+        {
+            string args = $"{string.Join(" ", opciones)} {archivoWav}";
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                //WorkingDirectory = Path.GetDirectoryName (archivoVag),
+                FileName = ejecutablePath,
+                Arguments = $"{string.Join(" ", opciones)} {archivoWav}",
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            using (Process process = new Process { StartInfo = startInfo })
+            {
+                process.Start();
+                process.WaitForExit();
+
+                // Puedes manejar la salida estándar o errores si es necesario
+                string output = process.StandardOutput.ReadToEnd();
+                string error = process.StandardError.ReadToEnd();
+
+                // Realiza cualquier manipulación adicional según sea necesario
+                // ...
+
+                // Muestra la salida en la consola para fines de demostración
+                if (!string.IsNullOrEmpty(error))
+                {
+                    salida = error;
+                }
+                else
+                {
+                    salida = output;
+                }
+            }
+        }
+
         // Abre el archivo VAG y lo adapta al formato que funciona bien en WE-PES
         public bool ConvertirLBA(string archivo, bool isCallName)
         {
