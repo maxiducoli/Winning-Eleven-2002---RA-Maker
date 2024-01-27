@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34408.163
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Winning Eleven 2002 - RA Maker", "Winning Eleven 2002 - RA Maker\Winning Eleven 2002 - RA Maker.csproj", "{7BB0E915-5418-4BFB-B914-EFA830524301}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WE_RA_Maker", "Winning Eleven 2002 - RA Maker\WE_RA_Maker.csproj", "{7BB0E915-5418-4BFB-B914-EFA830524301}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rabulder", "rabulder\rabulder.csproj", "{630B7C95-3484-458A-81A5-1B716DDEE3E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rabulder", "rabulder\rabulder.csproj", "{630B7C95-3484-458A-81A5-1B716DDEE3E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

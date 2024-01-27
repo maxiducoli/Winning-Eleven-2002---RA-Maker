@@ -1,20 +1,36 @@
+using System.Diagnostics;
 using System.IO;
 using System.Media;
+using System.Security.Policy;
+using System.Windows.Controls;
+using rabulder;
+using WE_RA_Maker;
 
 namespace Winning_Eleven_2002___RA_Maker
 {
     public partial class Form1 : Form
     {
         SoundPlayer player;
+        int rowIndex = -1;
         public Form1()
         {
             InitializeComponent();
             CargarGrilla();
+            CrearTemporal();
         }
         private void CargarGrilla()
         {
             CargarCSVEnGridView("Tools\\DatosGrilla.csv");
 
+        }
+        private void CrearTemporal()
+        {
+            DirectoryInfo directoryInfo = new DirectoryInfo(Application.StartupPath + "Temp\\");
+
+            if (!directoryInfo.Exists)
+            {
+                directoryInfo.Create();
+            }
         }
         private void btnAgregarAudio_Click(object sender, EventArgs e)
         {
@@ -27,7 +43,6 @@ namespace Winning_Eleven_2002___RA_Maker
             ////wavToVagConverter.ConvertirWavEnVag( "e:\\TEMP\\Wav2Vag\\CONVERTID.vag", "e:\\TEMP\\Wav2Vag\\CONVERTI.wav");
             //MessageBox.Show(salida);
         }
-
         private void CargarCSVEnGridView(string rutaArchivo)
         {
             try
@@ -40,9 +55,9 @@ namespace Winning_Eleven_2002___RA_Maker
                 {
                     string[] campos = lineas[i].Split(';');
                     dgvVAGs.Rows.Add(new DataGridViewRow());
-                    dgvVAGs.Rows[i].Cells["colPuntero"].Value = campos[0];
-                    dgvVAGs.Rows[i].Cells["colArchivo"].Value = campos[1];
-                    dgvVAGs.Rows[i].Cells["colFrase"].Value = campos[2];
+                    dgvVAGs.Rows[i].Cells["colPuntero"].Value = campos[0].Trim();
+                    dgvVAGs.Rows[i].Cells["colArchivo"].Value = campos[1].Trim();
+                    dgvVAGs.Rows[i].Cells["colFrase"].Value = campos[2].Trim();
                 }
 
             }
@@ -51,7 +66,6 @@ namespace Winning_Eleven_2002___RA_Maker
                 MessageBox.Show($"Error al cargar el archivo CSV: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private void CargarArchivosWav()
         {
             string[] listaDeArchivos = null;
@@ -83,7 +97,6 @@ namespace Winning_Eleven_2002___RA_Maker
                 }
             }
         }
-
         private void button1_Click(object sender, EventArgs e)
         {
             if (lstArchivos.Items.Count > 0)
@@ -99,7 +112,6 @@ namespace Winning_Eleven_2002___RA_Maker
                 }
             }
         }
-
         private void button2_Click(object sender, EventArgs e)
         {
             if (lstArchivos.SelectedIndex < lstArchivos.Items.Count - 1)
@@ -115,19 +127,19 @@ namespace Winning_Eleven_2002___RA_Maker
                 }
             }
         }
-
         private void button3_Click(object sender, EventArgs e)
         {
             if (lstArchivos.Items.Count > 0)
             {
-                if (MessageBox.Show("Are you sure wanna delete selected item?") == DialogResult.OK)
+                int indice = lstArchivos.SelectedIndex;
+                if (MessageBox.Show("Are you sure wanna delete selected item?", "Delete Item", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
                 {
-                    lstArchivos.Items.RemoveAt(lstArchivos.SelectedIndex);
+                    lstArchivos.Items.RemoveAt(indice);
+                    lstArchivos.SelectedIndex = indice;
                 }
             }
 
         }
-
         private void button4_Click(object sender, EventArgs e)
         {
             Wav2Vag wav2Vag = new Wav2Vag(Application.StartupPath + "Tools\\wav2vag.exe");
@@ -165,7 +177,6 @@ namespace Winning_Eleven_2002___RA_Maker
             }
 
         }
-
         private void lstArchivos_Click(object sender, EventArgs e)
         {
             Wav2Vag wav2Vag = new Wav2Vag(Application.StartupPath + "Tools\\wavInfo.exe");
@@ -173,7 +184,7 @@ namespace Winning_Eleven_2002___RA_Maker
             string[] opciones = { "-m" };
 
 
-            if (lstArchivos.Items.Count > 0)
+            if (lstArchivos.Items.Count > 0 && lstArchivos.SelectedIndex > -1)
             {
                 string archivo = lstArchivos.SelectedItem.ToString();
 
@@ -196,7 +207,6 @@ namespace Winning_Eleven_2002___RA_Maker
                 }
             }
         }
-
         private void btnPlay_Click(object sender, EventArgs e)
         {
             if (lstArchivos.Items.Count > 0)
@@ -209,14 +219,12 @@ namespace Winning_Eleven_2002___RA_Maker
                 player.Play();
             }
         }
-
         private void btnStop_Click(object sender, EventArgs e)
         {
             if (player != null)
 
                 player.Stop();
         }
-
         private void btnClear_Click(object sender, EventArgs e)
         {
             if (lstArchivos.Items.Count > 0)
@@ -228,7 +236,6 @@ namespace Winning_Eleven_2002___RA_Maker
                 }
             }
         }
-
         private void btnAdd_Click(object sender, EventArgs e)
         {
 
@@ -247,10 +254,87 @@ namespace Winning_Eleven_2002___RA_Maker
                     {
 
                         lstArchivos.Items.Insert(indice, openFileDialog.FileName);
+                        lstArchivos.SelectedIndex = indice;
                     }
 
                 }
             }
+        }
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (MessageBox.Show("Quit?", "Close program", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK)
+            {
+                e.Cancel = true;
+                return;
+            }
+
+
+            string archivo = Application.StartupPath + "Tools\\DatosGrilla.csv";
+            using (var writetext = new StreamWriter(archivo))
+            {
+                foreach (DataGridViewRow row in dgvVAGs.Rows)
+                {
+                    writetext.WriteLine($"{row.Cells[0].Value};{row.Cells[1].Value};{row.Cells[2].Value}");
+                }
+            }
+            EliminarTodoAlCerrar();
+        }
+        private void EliminarTodoAlCerrar()
+        {
+            DirectoryInfo dir = new DirectoryInfo(Application.StartupPath + "TEMP");
+            if (dir.Exists)
+                dir.Delete(true);
+
+        }
+        private void contextMenuStrip1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
+        }
+        private void dgvVAGs_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            Point p = Cursor.Position;
+            PopUp.PointToScreen(p);
+            PopUp.Show(p);
+            rowIndex = e.RowIndex;
+        }
+        private void tsMenuCopiar_Click(object sender, EventArgs e)
+        {
+            string mensaje = Convert.ToString(dgvVAGs.Rows[rowIndex].Cells["colFrase"].Value);
+            Clipboard.SetText(mensaje);
+            MessageBox.Show(mensaje + "\n" + "\n" + "Copy to clipboard");
+        }
+        private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+               string a = string.Empty;
+            switch (toolStripComboBox1.SelectedIndex)
+            {
+                case 0:
+                a = "https://fakeyou.com/tts/TM:8hzs5fwhqs75" 
+                        
+                    ;
+                    break;
+                case 1:
+                a = "https://fakeyou.com/tts/TM:d4989jhcs46z";
+                
+                    break;
+                case 2:
+                a = "https://fakeyou.com/tts/TM:b34ppqwan09q";
+                break;
+                case 3:
+                    a = "https://fakeyou.com/tts/TM:d4hc28vnmz8g";
+                break;
+
+            }
+            if (!string.IsNullOrEmpty(a))
+            {
+                var psi = new ProcessStartInfo
+                {
+                    FileName = a,
+                    UseShellExecute = true
+                };
+                Process.Start(psi);
+            }
+            //    System.Diagnostics.Process.Start(a); ;
         }
     }
 }

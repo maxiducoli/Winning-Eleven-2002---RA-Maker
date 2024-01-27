@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
+using rabulder;
 
-namespace Winning_Eleven_2002___RA_Maker
+namespace WE_RA_Maker
 {
     public class Wav2Vag
     {
@@ -18,8 +18,8 @@ namespace Winning_Eleven_2002___RA_Maker
         }
 
         public void ConvertirAWavVag(string archivoWav, string archivoVag, out string salida, string[] opciones = null)
-         {
-            
+        {
+
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 //WorkingDirectory = Path.GetDirectoryName (archivoVag),
@@ -126,33 +126,33 @@ namespace Winning_Eleven_2002___RA_Maker
                     fs.Write(bytesFinalesCallnames, 0, bytesFinalesCallnames.Length);
                     dato -= bytesFinalesCallnames.Length;
                 }
-                else 
+                else
                 {
-                int posicion = (int)fs.Length;
-                fs.Position = posicion - 1;
-                fs.Seek(posicion, SeekOrigin.Begin);
-                fs.Write(bytesFinalesRelatos, 0, bytesFinalesRelatos.Length);
+                    int posicion = (int)fs.Length;
+                    fs.Position = posicion - 1;
+                    fs.Seek(posicion, SeekOrigin.Begin);
+                    fs.Write(bytesFinalesRelatos, 0, bytesFinalesRelatos.Length);
                     dato -= bytesFinalesRelatos.Length;
                 }
-                
+
 
 
                 bytes = new byte[dato];
                 // Rellenamos con 000000
                 fs.Seek(fs.Length, SeekOrigin.Begin);
                 fs.Write(bytes, 0, bytes.Length);
-                
+
                 result = fs.Length % 2048 == 0 ? true : false;
             }
             return result;
         }
 
-        public bool  ProcesarArchivo(string archivoWav,string archivoVag, out string salida)
+        public bool ProcesarArchivo(string archivoWav, string archivoVag, out string salida)
         {
             bool resutl = false;
             salida = string.Empty;
             string archivoSalida = Application.StartupPath + "TEMP\\" + archivoVag + ".vag";
-            string nuevoWav = Application.StartupPath + "TEMP\\" +  archivoVag + ".wav";
+            string nuevoWav = Application.StartupPath + "TEMP\\" + archivoVag + ".wav";
             string[] opciones = { };
 
             try
