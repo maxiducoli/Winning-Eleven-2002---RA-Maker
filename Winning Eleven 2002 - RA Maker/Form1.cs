@@ -89,6 +89,7 @@ namespace Winning_Eleven_2002___RA_Maker
                     {
                         listaDeArchivos[i] = item;
                         i++;
+                        lblContador.Text = "Files counts: " + i.ToString();
                     }
                 }
             }
@@ -164,22 +165,22 @@ namespace Winning_Eleven_2002___RA_Maker
                     if (string.IsNullOrEmpty(salida))
                     {
                         dgvVAGs.Rows[i].Cells["colAsignado"].Value = listadoNombre[i];
-                        dgvVAGs.Rows[i].Cells["colEstado"].Value = "OK";
+                       // dgvVAGs.Rows[i].Cells["colEstado"].Value = "OK";
                         dgvVAGs.Rows[i].Cells["colCheckeo"].Value = true;
-                        dgvVAGs.Rows[i].Cells["colEstado"].Style.BackColor = Color.Green;
-                        dgvVAGs.Rows[i].Cells["colEstado"].Style.ForeColor = Color.White;
+                       // dgvVAGs.Rows[i].Cells["colEstado"].Style.BackColor = Color.Green;
+                        //dgvVAGs.Rows[i].Cells["colEstado"].Style.ForeColor = Color.White;
                     }
                     else
                     {
-                        dgvVAGs.Rows[i].Cells["colEstado"].Value = "ERROR";
+                        //dgvVAGs.Rows[i].Cells["colEstado"].Value = "ERROR";
                         dgvVAGs.Rows[i].Cells["colCheckeo"].Value = false;
-                        dgvVAGs.Rows[i].Cells["colEstado"].Style.BackColor = Color.Red;
-                        dgvVAGs.Rows[i].Cells["colEstado"].Style.ForeColor = Color.White;
+                        //dgvVAGs.Rows[i].Cells["colEstado"].Style.BackColor = Color.Red;
+                        //dgvVAGs.Rows[i].Cells["colEstado"].Style.ForeColor = Color.White;
                     }
                 }
                 progressBar1.Value = i;
             }
-
+btnCrearRA.Enabled = true;
         }
         private void lstArchivos_Click(object sender, EventArgs e)
         {
@@ -343,25 +344,32 @@ namespace Winning_Eleven_2002___RA_Maker
         private void btnCrearRA_Click(object sender, EventArgs e)
         {
             int indice = 0;
-            string[] listadoPunteros;
-            string[] listadoDeArchivos; 
+            List<string> listadoPunteros;
+            List<string> listadoDeArchivos; 
             Tools_RA tools_RA = new Tools_RA();
             FolderBrowserDialog openFolderDialog = new FolderBrowserDialog();
             DialogResult result = openFolderDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                int count = dgvVAGs.RowCount;
-                listadoDeArchivos = new string[count];
-                listadoPunteros = new string[count];
+                listadoDeArchivos = new List<string>();
+                listadoPunteros = new List<string>();
 
                 foreach (DataGridViewRow row in dgvVAGs.Rows)
                 {
-                    listadoPunteros[indice] = Convert.ToString(row.Cells["colPuntero"].Value);
-                    listadoDeArchivos[indice] = Application.StartupPath + "Temp\\" + Convert.ToString(row.Cells["colAsignado"].Value) + ".vag";
+                    //string dato = Convert.ToString(row.Cells["colAsignado"].Value).Trim();
+                    if (Convert.ToBoolean(row.Cells["colCheckeo"].Value) == true)
+                    {
+                        listadoDeArchivos.Add( Application.StartupPath + "Temp\\" + Convert.ToString(row.Cells["colAsignado"].Value) + ".vag");
+                        listadoPunteros.Add(Convert.ToString(row.Cells["colPuntero"].Value));
+                        //dato = string.Empty;
+                    }
+                    //else
+                    //{
+                    //    MessageBox.Show(indice.ToString());
+                    //}
                     indice++;
                 }
-
-                tools_RA.CrearArchivosRA(listadoPunteros, listadoDeArchivos, openFolderDialog.SelectedPath, chkCallnames.Checked);
+                tools_RA.CrearArchivosRA(listadoPunteros.ToArray(), listadoDeArchivos.ToArray(), openFolderDialog.SelectedPath, chkCallnames.Checked);
             }
         }
     }

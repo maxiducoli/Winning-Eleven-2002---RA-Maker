@@ -29,14 +29,13 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             lstArchivos = new ListBox();
             dgvVAGs = new DataGridView();
             colPuntero = new DataGridViewTextBoxColumn();
             colArchivo = new DataGridViewTextBoxColumn();
             colFrase = new DataGridViewTextBoxColumn();
             colAsignado = new DataGridViewTextBoxColumn();
-            colEstado = new DataGridViewTextBoxColumn();
             colCheckeo = new DataGridViewCheckBoxColumn();
             btnAgregarAudio = new Button();
             btnCrearRA = new Button();
@@ -56,6 +55,7 @@
             tsMenuCopiar = new ToolStripMenuItem();
             toolStripComboBox1 = new ToolStripComboBox();
             progressBar1 = new ProgressBar();
+            lblContador = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvVAGs).BeginInit();
             groupBox1.SuspendLayout();
             PopUp.SuspendLayout();
@@ -75,16 +75,16 @@
             // 
             dgvVAGs.AllowUserToAddRows = false;
             dgvVAGs.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            dgvVAGs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
+            dgvVAGs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvVAGs.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvVAGs.Columns.AddRange(new DataGridViewColumn[] { colPuntero, colArchivo, colFrase, colAsignado, colEstado, colCheckeo });
+            dgvVAGs.Columns.AddRange(new DataGridViewColumn[] { colPuntero, colArchivo, colFrase, colAsignado, colCheckeo });
             dgvVAGs.Location = new Point(18, 347);
             dgvVAGs.Name = "dgvVAGs";
             dgvVAGs.RowHeadersVisible = false;
@@ -127,21 +127,12 @@
             colAsignado.Resizable = DataGridViewTriState.False;
             colAsignado.Width = 81;
             // 
-            // colEstado
-            // 
-            colEstado.HeaderText = "state";
-            colEstado.MaxInputLength = 2;
-            colEstado.Name = "colEstado";
-            colEstado.ReadOnly = true;
-            colEstado.Resizable = DataGridViewTriState.False;
-            // 
             // colCheckeo
             // 
             colCheckeo.HeaderText = "Check";
             colCheckeo.Name = "colCheckeo";
             colCheckeo.ReadOnly = true;
             colCheckeo.Resizable = DataGridViewTriState.False;
-            colCheckeo.Visible = false;
             // 
             // btnAgregarAudio
             // 
@@ -158,6 +149,7 @@
             // 
             // btnCrearRA
             // 
+            btnCrearRA.Enabled = false;
             btnCrearRA.Location = new Point(1145, 671);
             btnCrearRA.Name = "btnCrearRA";
             btnCrearRA.Size = new Size(75, 61);
@@ -288,9 +280,9 @@
             chkCallnames.AutoSize = true;
             chkCallnames.Location = new Point(1145, 646);
             chkCallnames.Name = "chkCallnames";
-            chkCallnames.Size = new Size(78, 19);
+            chkCallnames.Size = new Size(83, 19);
             chkCallnames.TabIndex = 14;
-            chkCallnames.Text = "CallName";
+            chkCallnames.Text = "CallNames";
             chkCallnames.UseVisualStyleBackColor = true;
             // 
             // PopUp
@@ -323,11 +315,21 @@
             progressBar1.Size = new Size(159, 23);
             progressBar1.TabIndex = 15;
             // 
+            // lblContador
+            // 
+            lblContador.AutoSize = true;
+            lblContador.Location = new Point(724, 41);
+            lblContador.Name = "lblContador";
+            lblContador.Size = new Size(75, 15);
+            lblContador.TabIndex = 16;
+            lblContador.Text = "Files counts: ";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1232, 744);
+            Controls.Add(lblContador);
             Controls.Add(progressBar1);
             Controls.Add(chkCallnames);
             Controls.Add(btnAdd);
@@ -371,15 +373,15 @@
         private ListBox lstInformacionWAV;
         private Button btnAdd;
         private CheckBox chkCallnames;
-        private DataGridViewTextBoxColumn colPuntero;
-        private DataGridViewTextBoxColumn colArchivo;
-        private DataGridViewTextBoxColumn colFrase;
-        private DataGridViewTextBoxColumn colAsignado;
-        private DataGridViewTextBoxColumn colEstado;
-        private DataGridViewCheckBoxColumn colCheckeo;
         private ContextMenuStrip PopUp;
         private ToolStripMenuItem tsMenuCopiar;
         private ToolStripComboBox toolStripComboBox1;
         private ProgressBar progressBar1;
+        private DataGridViewTextBoxColumn colPuntero;
+        private DataGridViewTextBoxColumn colArchivo;
+        private DataGridViewTextBoxColumn colFrase;
+        private DataGridViewTextBoxColumn colAsignado;
+        private DataGridViewCheckBoxColumn colCheckeo;
+        private Label lblContador;
     }
 }

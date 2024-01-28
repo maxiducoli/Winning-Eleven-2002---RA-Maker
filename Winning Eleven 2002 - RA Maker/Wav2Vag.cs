@@ -107,40 +107,37 @@ namespace WE_RA_Maker
             bool result = false;
 
 
-            using (FileStream fs = new FileStream(archivo, FileMode.Open, FileAccess.ReadWrite))
+            using (FileStream fs = new FileStream(archivo, FileMode.Append, FileAccess.Write))
             {
                 int dato = (int)fs.Length / 2048;
 
-                if (fs.Length % 2048 != 0)
-                {
-                    decimal resto = ((dato + 1) * 2048) - fs.Length;
-                    dato = (int)resto;
-                }
+               
 
                 // Insertamos el arreglo de bytes para los VAGs del juego
                 if (isCallName)
                 {
                     int posicion = (int)fs.Length;
-                    fs.Position = posicion - 1;
+                    //fs.Position = posicion - 1;
                     fs.Seek(posicion, SeekOrigin.Begin);
                     fs.Write(bytesFinalesCallnames, 0, bytesFinalesCallnames.Length);
-                    dato -= bytesFinalesCallnames.Length;
                 }
                 else
                 {
                     int posicion = (int)fs.Length;
-                    fs.Position = posicion - 1;
+                    //fs.Position = posicion + 1;
                     fs.Seek(posicion, SeekOrigin.Begin);
                     fs.Write(bytesFinalesRelatos, 0, bytesFinalesRelatos.Length);
-                    dato -= bytesFinalesRelatos.Length;
                 }
 
-
-
+                if (fs.Length % 2048 != 0)
+                {
+                    decimal resto = ((dato + 1) * 2048) - fs.Length;
+                    dato = (int)resto;
                 bytes = new byte[dato];
                 // Rellenamos con 000000
                 fs.Seek(fs.Length, SeekOrigin.Begin);
                 fs.Write(bytes, 0, bytes.Length);
+                }
 
                 result = fs.Length % 2048 == 0 ? true : false;
             }
