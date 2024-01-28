@@ -56,6 +56,7 @@
             toolStripComboBox1 = new ToolStripComboBox();
             progressBar1 = new ProgressBar();
             lblContador = new Label();
+            lblVAGs = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvVAGs).BeginInit();
             groupBox1.SuspendLayout();
             PopUp.SuspendLayout();
@@ -324,11 +325,21 @@
             lblContador.TabIndex = 16;
             lblContador.Text = "Files counts: ";
             // 
+            // lblVAGs
+            // 
+            lblVAGs.AutoSize = true;
+            lblVAGs.Location = new Point(18, 329);
+            lblVAGs.Name = "lblVAGs";
+            lblVAGs.Size = new Size(82, 15);
+            lblVAGs.TabIndex = 17;
+            lblVAGs.Text = "VAGs amount:";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1232, 744);
+            Controls.Add(lblVAGs);
             Controls.Add(lblContador);
             Controls.Add(progressBar1);
             Controls.Add(chkCallnames);
@@ -383,5 +394,6 @@
         private DataGridViewTextBoxColumn colAsignado;
         private DataGridViewCheckBoxColumn colCheckeo;
         private Label lblContador;
+        private Label lblVAGs;
     }
 }
