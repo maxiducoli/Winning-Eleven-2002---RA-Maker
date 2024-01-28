@@ -55,6 +55,7 @@
             PopUp = new ContextMenuStrip(components);
             tsMenuCopiar = new ToolStripMenuItem();
             toolStripComboBox1 = new ToolStripComboBox();
+            progressBar1 = new ProgressBar();
             ((System.ComponentModel.ISupportInitialize)dgvVAGs).BeginInit();
             groupBox1.SuspendLayout();
             PopUp.SuspendLayout();
@@ -163,6 +164,7 @@
             btnCrearRA.TabIndex = 3;
             btnCrearRA.Text = "Create RA";
             btnCrearRA.UseVisualStyleBackColor = true;
+            btnCrearRA.Click += btnCrearRA_Click;
             // 
             // groupBox1
             // 
@@ -295,7 +297,7 @@
             // 
             PopUp.Items.AddRange(new ToolStripItem[] { tsMenuCopiar, toolStripComboBox1 });
             PopUp.Name = "PopUp";
-            PopUp.Size = new Size(241, 75);
+            PopUp.Size = new Size(241, 53);
             PopUp.TabStop = true;
             PopUp.Opening += contextMenuStrip1_Opening;
             // 
@@ -314,11 +316,19 @@
             toolStripComboBox1.Text = "Relatores FakeYou";
             toolStripComboBox1.SelectedIndexChanged += toolStripComboBox1_SelectedIndexChanged;
             // 
+            // progressBar1
+            // 
+            progressBar1.Location = new Point(460, 318);
+            progressBar1.Name = "progressBar1";
+            progressBar1.Size = new Size(159, 23);
+            progressBar1.TabIndex = 15;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1232, 744);
+            Controls.Add(progressBar1);
             Controls.Add(chkCallnames);
             Controls.Add(btnAdd);
             Controls.Add(bnProcessData);
@@ -370,5 +380,6 @@
         private ContextMenuStrip PopUp;
         private ToolStripMenuItem tsMenuCopiar;
         private ToolStripComboBox toolStripComboBox1;
+        private ProgressBar progressBar1;
     }
 }

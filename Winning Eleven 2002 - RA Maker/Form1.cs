@@ -3,8 +3,11 @@ using System.IO;
 using System.Media;
 using System.Security.Policy;
 using System.Windows.Controls;
+using Microsoft.Win32;
+using System.Windows.Forms;
 using rabulder;
 using WE_RA_Maker;
+using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 
 namespace Winning_Eleven_2002___RA_Maker
 {
@@ -146,7 +149,7 @@ namespace Winning_Eleven_2002___RA_Maker
             string[] listadoNombre = new string[dgvVAGs.RowCount];
             int indice = 0;
             string salida = string.Empty;
-
+            progressBar1.Maximum = lstArchivos.Items.Count;
             // Cargamos los nomnbres de los VAGs reales
             foreach (DataGridViewRow row in dgvVAGs.Rows)
             {
@@ -174,6 +177,7 @@ namespace Winning_Eleven_2002___RA_Maker
                         dgvVAGs.Rows[i].Cells["colEstado"].Style.ForeColor = Color.White;
                     }
                 }
+                progressBar1.Value = i;
             }
 
         }
@@ -305,24 +309,24 @@ namespace Winning_Eleven_2002___RA_Maker
         }
         private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-               string a = string.Empty;
+            string a = string.Empty;
             switch (toolStripComboBox1.SelectedIndex)
             {
                 case 0:
-                a = "https://fakeyou.com/tts/TM:8hzs5fwhqs75" 
-                        
-                    ;
+                    a = "https://fakeyou.com/tts/TM:8hzs5fwhqs75"
+
+                        ;
                     break;
                 case 1:
-                a = "https://fakeyou.com/tts/TM:d4989jhcs46z";
-                
+                    a = "https://fakeyou.com/tts/TM:d4989jhcs46z";
+
                     break;
                 case 2:
-                a = "https://fakeyou.com/tts/TM:b34ppqwan09q";
-                break;
+                    a = "https://fakeyou.com/tts/TM:b34ppqwan09q";
+                    break;
                 case 3:
                     a = "https://fakeyou.com/tts/TM:d4hc28vnmz8g";
-                break;
+                    break;
 
             }
             if (!string.IsNullOrEmpty(a))
@@ -335,6 +339,30 @@ namespace Winning_Eleven_2002___RA_Maker
                 Process.Start(psi);
             }
             //    System.Diagnostics.Process.Start(a); ;
+        }
+        private void btnCrearRA_Click(object sender, EventArgs e)
+        {
+            int indice = 0;
+            string[] listadoPunteros;
+            string[] listadoDeArchivos; 
+            Tools_RA tools_RA = new Tools_RA();
+            FolderBrowserDialog openFolderDialog = new FolderBrowserDialog();
+            DialogResult result = openFolderDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                int count = dgvVAGs.RowCount;
+                listadoDeArchivos = new string[count];
+                listadoPunteros = new string[count];
+
+                foreach (DataGridViewRow row in dgvVAGs.Rows)
+                {
+                    listadoPunteros[indice] = Convert.ToString(row.Cells["colPuntero"].Value);
+                    listadoDeArchivos[indice] = Application.StartupPath + "Temp\\" + Convert.ToString(row.Cells["colAsignado"].Value) + ".vag";
+                    indice++;
+                }
+
+                tools_RA.CrearArchivosRA(listadoPunteros, listadoDeArchivos, openFolderDialog.SelectedPath, chkCallnames.Checked);
+            }
         }
     }
 }
