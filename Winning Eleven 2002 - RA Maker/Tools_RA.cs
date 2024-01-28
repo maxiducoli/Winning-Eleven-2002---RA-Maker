@@ -55,7 +55,7 @@ namespace rabulder
 
         public void CrearArchivosRA(string[] listaOffset, string[] listaDeVags, string folder, bool esCallName)
         {
-            const string ARCHIVO_RAOO = "\\Tools\\W2002J00.RA";
+            string ARCHIVO_RAOO = Application.StartupPath +  "Tools\\W2002J00.RA";
             int indice = -1;
             int ContadorSize = 0;
             int LBAValue = -1;
@@ -70,7 +70,7 @@ namespace rabulder
             int contadorLista = 0;
            // Wav2Vag wav2vag = new Wav2Vag();
 
-            string[] raFileNames = { "W2002J10.RA", "W2002J11.RA", "W2002J12.RA", "W2002J60.RA", "W2002J61.RA", "W2002J62.RA", "W2002J63.RA", "W2002J64.RA", "W2002J65.RA", "W2002J70.RA", "W2002J71.RA", "W2002J72.RA", "W2002J73.RA", "W2002J74.RA" };
+            string[] raFileNames = { "W2002J00.RA", "W2002J10.RA", "W2002J11.RA", "W2002J12.RA", "W2002J60.RA", "W2002J61.RA", "W2002J62.RA", "W2002J63.RA", "W2002J64.RA", "W2002J65.RA", "W2002J70.RA", "W2002J71.RA", "W2002J72.RA", "W2002J73.RA", "W2002J74.RA" };
             try
             {
                 if (!esCallName)
@@ -168,10 +168,10 @@ namespace rabulder
                                 Wav2Vag wav2Vag = new Wav2Vag();
 
                                 // Si convirtió bien, sigue.
-                                if (wav2Vag.ConvertirLBA("\"" + listaDeVags[i] + "\"", esCallName))
+                                if (wav2Vag.ConvertirLBA(listaDeVags[i], esCallName))
                                 {
                                     // Abrimos el archivo recién convertido para leer
-                                    using (FileStream f = new FileStream("\\Temp\\" + listaDeVags[i], FileMode.Open, FileAccess.Read))
+                                    using (FileStream f = new FileStream(listaDeVags[i], FileMode.Open, FileAccess.Read))
                                     {
                                         // Contador temporal del tamaño del RA
                                         contadorTemp = (int)f.Length + ContadorSize;
@@ -200,7 +200,8 @@ namespace rabulder
 
                                     // Escribimos el VAG en el RA nuevo
                                     fs.Write(buffer, 0, buffer.Length);
-
+                                    // Contador de tamaño del archivo creado.
+                                    ContadorSize = (int)fs.Length;
                                     using (FileStream fsPuntero = new FileStream(ARCHIVO_RAOO, FileMode.Open, FileAccess.Write))
                                     {
                                         // Obtengo el offset del puntero
