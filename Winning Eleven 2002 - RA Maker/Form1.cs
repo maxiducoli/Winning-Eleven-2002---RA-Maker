@@ -62,7 +62,7 @@ namespace Winning_Eleven_2002___RA_Maker
                     dgvVAGs.Rows[i].Cells["colArchivo"].Value = campos[1].Trim();
                     dgvVAGs.Rows[i].Cells["colFrase"].Value = campos[2].Trim();
                 }
-
+                lblVAGs.Text += dgvVAGs.Rows.Count.ToString();
             }
             catch (Exception ex)
             {
@@ -89,7 +89,7 @@ namespace Winning_Eleven_2002___RA_Maker
                     {
                         listaDeArchivos[i] = item;
                         i++;
-                        lblContador.Text = "Files counts: " + i.ToString();
+                        
                     }
                 }
             }
@@ -99,6 +99,7 @@ namespace Winning_Eleven_2002___RA_Maker
                 {
                     lstArchivos.Items.Add(item);
                 }
+                lblContador.Text = "Files counts: " + lstArchivos.Items.Count.ToString();
             }
         }
         private void button1_Click(object sender, EventArgs e)
@@ -146,7 +147,7 @@ namespace Winning_Eleven_2002___RA_Maker
         }
         private void button4_Click(object sender, EventArgs e)
         {
-            Wav2Vag wav2Vag = new Wav2Vag(Application.StartupPath + "Tools\\wav2vag.exe");
+            Wav2Vag wav2Vag = new Wav2Vag(Application.StartupPath + "Tools\\wav2vag2.exe");
             string[] listadoNombre = new string[dgvVAGs.RowCount];
             int indice = 0;
             string salida = string.Empty;
@@ -154,32 +155,41 @@ namespace Winning_Eleven_2002___RA_Maker
             // Cargamos los nomnbres de los VAGs reales
             foreach (DataGridViewRow row in dgvVAGs.Rows)
             {
+                if (row.Cells["colArchivo"].Value != "")
+                {
                 listadoNombre[indice] = (string)row.Cells["colArchivo"].Value;
                 indice++;
+                }
             }
             for (int i = 0; i < lstArchivos.Items.Count; i++)
             {
                 string archivo = lstArchivos.Items[i].ToString();
-                if (wav2Vag.ProcesarArchivo(archivo, listadoNombre[i], out salida))
+                if (wav2Vag.ProcesarArchivo(archivo, listadoNombre[i], out salida,chkCallnames.Checked))
                 {
                     if (string.IsNullOrEmpty(salida))
                     {
+                        if (dgvVAGs.Rows[i].Cells["colArchivo"].Value != "")
+                        {
+
                         dgvVAGs.Rows[i].Cells["colAsignado"].Value = listadoNombre[i];
                        // dgvVAGs.Rows[i].Cells["colEstado"].Value = "OK";
                         dgvVAGs.Rows[i].Cells["colCheckeo"].Value = true;
                        // dgvVAGs.Rows[i].Cells["colEstado"].Style.BackColor = Color.Green;
                         //dgvVAGs.Rows[i].Cells["colEstado"].Style.ForeColor = Color.White;
+                        }
                     }
                     else
                     {
-                        //dgvVAGs.Rows[i].Cells["colEstado"].Value = "ERROR";
-                        dgvVAGs.Rows[i].Cells["colCheckeo"].Value = false;
+                        if (dgvVAGs.Rows[i].Cells["colAsignado"].Value != "")
+                            //dgvVAGs.Rows[i].Cells["colEstado"].Value = "ERROR";
+                            dgvVAGs.Rows[i].Cells["colCheckeo"].Value = false;
                         //dgvVAGs.Rows[i].Cells["colEstado"].Style.BackColor = Color.Red;
                         //dgvVAGs.Rows[i].Cells["colEstado"].Style.ForeColor = Color.White;
                     }
                 }
                 progressBar1.Value = i;
             }
+
 btnCrearRA.Enabled = true;
         }
         private void lstArchivos_Click(object sender, EventArgs e)

@@ -96,7 +96,7 @@ namespace WE_RA_Maker
         // Abre el archivo VAG y lo adapta al formato que funciona bien en WE-PES
         public bool ConvertirLBA(string archivo, bool isCallName)
         {
-            byte[] bytes = null;
+            //byte[] bytes = null;
             byte[] bytesFinalesCallnames = {
                                             0x0C,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
                                             0x00,0x07,0x77,0x77,0x77,0x77,0x77,0x77,0x77,0x77,0x77,0x77,0x77,0x77,0x77,0x77
@@ -107,44 +107,33 @@ namespace WE_RA_Maker
             bool result = false;
 
 
-            using (FileStream fs = new FileStream(archivo, FileMode.Append, FileAccess.Write))
+            using (FileStream fs = new FileStream(archivo, FileMode.OpenOrCreate, FileAccess.Write))
             {
-                int dato = (int)fs.Length / 2048;
-
-               
-
-                // Insertamos el arreglo de bytes para los VAGs del juego
+                int posicion = (int)fs.Length;
+                fs.Seek(posicion, SeekOrigin.Begin);
                 if (isCallName)
                 {
-                    int posicion = (int)fs.Length;
-                    //fs.Position = posicion - 1;
-                    fs.Seek(posicion, SeekOrigin.Begin);
-                    fs.Write(bytesFinalesCallnames, 0, bytesFinalesCallnames.Length);
+                fs.Write(bytesFinalesCallnames, 0, bytesFinalesCallnames.Length);
                 }
-                else
-                {
-                    int posicion = (int)fs.Length;
-                    //fs.Position = posicion + 1;
-                    fs.Seek(posicion, SeekOrigin.Begin);
-                    fs.Write(bytesFinalesRelatos, 0, bytesFinalesRelatos.Length);
-                }
+                else { fs.Write(bytesFinalesRelatos, 0, bytesFinalesRelatos.Length); }
 
                 if (fs.Length % 2048 != 0)
                 {
+                    int dato = (int)fs.Length / 2048;
                     decimal resto = ((dato + 1) * 2048) - fs.Length;
                     dato = (int)resto;
-                bytes = new byte[dato];
-                // Rellenamos con 000000
-                fs.Seek(fs.Length, SeekOrigin.Begin);
-                fs.Write(bytes, 0, bytes.Length);
+
+                    byte[] bytes = new byte[dato];
+                    fs.Seek(fs.Length, SeekOrigin.Begin);
+                    fs.Write(bytes, 0, bytes.Length);
                 }
 
-                result = fs.Length % 2048 == 0 ? true : false;
+                result = fs.Length % 2048 == 0;
             }
             return result;
         }
 
-        public bool ProcesarArchivo(string archivoWav, string archivoVag, out string salida)
+        public bool ProcesarArchivo(string archivoWav, string archivoVag, out string salida,bool esCallname)
         {
             bool resutl = false;
             salida = string.Empty;
@@ -160,6 +149,8 @@ namespace WE_RA_Maker
                 {
                     ConvertirAWavVag("\"" + nuevoWav + "\"", "\"" + archivoSalida + "\"", out salida, opciones);
                     File.Delete(nuevoWav);
+                    if (File.Exists(archivoSalida))
+                        ConvertirLBA(archivoSalida,esCallname);
                 }
 
                 resutl = File.Exists(archivoSalida) ? true : false;

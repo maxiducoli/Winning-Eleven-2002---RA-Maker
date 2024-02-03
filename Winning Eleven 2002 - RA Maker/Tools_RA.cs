@@ -200,12 +200,6 @@ namespace rabulder
                             // Comenzamos a leer los VAGs y a convertir su tamaño
                             while (!terminado)
                             {
-                                // Agrando los VAGs a su respectivo tamaño LBA
-                                Wav2Vag wav2Vag = new Wav2Vag();
-
-                                // Si convirtió bien, sigue.
-                                if (wav2Vag.ConvertirLBA(listaDeVags[contadorLista], esCallName))
-                                {
                                     // Abrimos el archivo recién convertido para leer
                                     using (FileStream f = new FileStream(listaDeVags[contadorLista], FileMode.Open, FileAccess.Read))
                                     {
@@ -254,12 +248,7 @@ namespace rabulder
                                         fsPuntero.Seek(offsetPuntero, SeekOrigin.Begin);
                                         fsPuntero.Write(datosVAG, 0, datosVAG.Length);
                                     }
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Error al convertir el VAG al tamaño necesario. Revise el archivo: " + listaDeVags[contadorLista]);
-                                    return;
-                                }
+
                                 contadorLista++;
                             }
                         }
