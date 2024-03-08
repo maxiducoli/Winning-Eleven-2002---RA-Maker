@@ -10,7 +10,6 @@
 
 namespace Winning_Eleven_2002___RA_Maker.Properties {
     using System;
-   
     
     
     /// <summary>
@@ -77,6 +76,16 @@ namespace Winning_Eleven_2002___RA_Maker.Properties {
         internal static System.Drawing.Bitmap _256371 {
             get {
                 object obj = ResourceManager.GetObject("256371", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap abrir {
+            get {
+                object obj = ResourceManager.GetObject("abrir", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -177,6 +186,16 @@ namespace Winning_Eleven_2002___RA_Maker.Properties {
         internal static System.Drawing.Bitmap download_icon_pause_play_square_stop_icon_1320185672026264120_32 {
             get {
                 object obj = ResourceManager.GetObject("download-icon-pause+play+square+stop+icon-1320185672026264120_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap guardar32x32 {
+            get {
+                object obj = ResourceManager.GetObject("guardar32x32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -33,6 +33,7 @@
             lstArchivos = new ListBox();
             dgvVAGs = new DataGridView();
             colPuntero = new DataGridViewTextBoxColumn();
+            colpuntero2 = new DataGridViewTextBoxColumn();
             colArchivo = new DataGridViewTextBoxColumn();
             colFrase = new DataGridViewTextBoxColumn();
             colAsignado = new DataGridViewTextBoxColumn();
@@ -47,8 +48,8 @@
             btnDown = new Button();
             btnDelete = new Button();
             btnClear = new Button();
-            listBox1 = new ListBox();
-            bnProcessData = new Button();
+            lstConsola = new ListBox();
+            btnProcessData = new Button();
             btnAdd = new Button();
             chkCallnames = new CheckBox();
             PopUp = new ContextMenuStrip(components);
@@ -57,6 +58,11 @@
             progressBar1 = new ProgressBar();
             lblContador = new Label();
             lblVAGs = new Label();
+            rbNormal = new RadioButton();
+            rbCall1 = new RadioButton();
+            rbCall3 = new RadioButton();
+            btnGuardarListado = new Button();
+            btnAbrirlistado = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvVAGs).BeginInit();
             groupBox1.SuspendLayout();
             PopUp.SuspendLayout();
@@ -85,23 +91,30 @@
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
             dgvVAGs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvVAGs.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvVAGs.Columns.AddRange(new DataGridViewColumn[] { colPuntero, colArchivo, colFrase, colAsignado, colCheckeo });
+            dgvVAGs.Columns.AddRange(new DataGridViewColumn[] { colPuntero, colpuntero2, colArchivo, colFrase, colAsignado, colCheckeo });
             dgvVAGs.Location = new Point(18, 347);
             dgvVAGs.Name = "dgvVAGs";
             dgvVAGs.RowHeadersVisible = false;
             dgvVAGs.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvVAGs.Size = new Size(1202, 285);
+            dgvVAGs.Size = new Size(1121, 285);
             dgvVAGs.TabIndex = 1;
             dgvVAGs.CellClick += dgvVAGs_CellClick;
             // 
             // colPuntero
             // 
             colPuntero.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-            colPuntero.HeaderText = "Offset";
+            colPuntero.HeaderText = "Offset 1";
             colPuntero.Name = "colPuntero";
             colPuntero.ReadOnly = true;
             colPuntero.Resizable = DataGridViewTriState.False;
-            colPuntero.Width = 64;
+            colPuntero.Width = 73;
+            // 
+            // colpuntero2
+            // 
+            colpuntero2.HeaderText = "Offset2";
+            colpuntero2.Name = "colpuntero2";
+            colpuntero2.ReadOnly = true;
+            colpuntero2.Resizable = DataGridViewTriState.False;
             // 
             // colArchivo
             // 
@@ -137,13 +150,14 @@
             // 
             // btnAgregarAudio
             // 
+            btnAgregarAudio.Enabled = false;
             btnAgregarAudio.Image = Properties.Resources.audio;
             btnAgregarAudio.ImageAlign = ContentAlignment.MiddleLeft;
             btnAgregarAudio.Location = new Point(18, 12);
             btnAgregarAudio.Name = "btnAgregarAudio";
-            btnAgregarAudio.Size = new Size(104, 40);
+            btnAgregarAudio.Size = new Size(123, 40);
             btnAgregarAudio.TabIndex = 2;
-            btnAgregarAudio.Text = "Add audio";
+            btnAgregarAudio.Text = "Agregar audio";
             btnAgregarAudio.TextAlign = ContentAlignment.MiddleRight;
             btnAgregarAudio.UseVisualStyleBackColor = true;
             btnAgregarAudio.Click += btnAgregarAudio_Click;
@@ -170,7 +184,7 @@
             groupBox1.Size = new Size(337, 282);
             groupBox1.TabIndex = 4;
             groupBox1.TabStop = false;
-            groupBox1.Text = "Audio Info and player";
+            groupBox1.Text = "Información del WAV y reproductor";
             // 
             // lstInformacionWAV
             // 
@@ -227,7 +241,7 @@
             // btnDelete
             // 
             btnDelete.Image = Properties.Resources.Clear1;
-            btnDelete.Location = new Point(721, 294);
+            btnDelete.Location = new Point(580, 294);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(48, 47);
             btnDelete.TabIndex = 7;
@@ -237,39 +251,40 @@
             // btnClear
             // 
             btnClear.Image = Properties.Resources.clear_261;
-            btnClear.Location = new Point(775, 294);
+            btnClear.Location = new Point(634, 294);
             btnClear.Name = "btnClear";
             btnClear.Size = new Size(48, 47);
             btnClear.TabIndex = 10;
             btnClear.UseVisualStyleBackColor = true;
             btnClear.Click += btnClear_Click;
             // 
-            // listBox1
+            // lstConsola
             // 
-            listBox1.BackColor = SystemColors.InfoText;
-            listBox1.Font = new Font("Itim", 10F);
-            listBox1.ForeColor = Color.Lime;
-            listBox1.FormattingEnabled = true;
-            listBox1.ItemHeight = 15;
-            listBox1.Location = new Point(18, 638);
-            listBox1.Name = "listBox1";
-            listBox1.Size = new Size(1121, 94);
-            listBox1.TabIndex = 11;
+            lstConsola.BackColor = SystemColors.InfoText;
+            lstConsola.Font = new Font("Itim", 10F);
+            lstConsola.ForeColor = Color.Lime;
+            lstConsola.FormattingEnabled = true;
+            lstConsola.ItemHeight = 15;
+            lstConsola.Location = new Point(18, 638);
+            lstConsola.Name = "lstConsola";
+            lstConsola.Size = new Size(1121, 94);
+            lstConsola.TabIndex = 11;
             // 
-            // bnProcessData
+            // btnProcessData
             // 
-            bnProcessData.Location = new Point(339, 294);
-            bnProcessData.Name = "bnProcessData";
-            bnProcessData.Size = new Size(115, 47);
-            bnProcessData.TabIndex = 12;
-            bnProcessData.Text = "Process files";
-            bnProcessData.UseVisualStyleBackColor = true;
-            bnProcessData.Click += button4_Click;
+            btnProcessData.Enabled = false;
+            btnProcessData.Location = new Point(210, 294);
+            btnProcessData.Name = "btnProcessData";
+            btnProcessData.Size = new Size(132, 47);
+            btnProcessData.TabIndex = 12;
+            btnProcessData.Text = "Preparar archivos VAG";
+            btnProcessData.UseVisualStyleBackColor = true;
+            btnProcessData.Click += button4_Click;
             // 
             // btnAdd
             // 
             btnAdd.Image = Properties.Resources.add_icon_vector_216797802;
-            btnAdd.Location = new Point(667, 294);
+            btnAdd.Location = new Point(526, 294);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(48, 47);
             btnAdd.TabIndex = 13;
@@ -279,12 +294,14 @@
             // chkCallnames
             // 
             chkCallnames.AutoSize = true;
+            chkCallnames.Enabled = false;
             chkCallnames.Location = new Point(1145, 646);
             chkCallnames.Name = "chkCallnames";
-            chkCallnames.Size = new Size(83, 19);
+            chkCallnames.Size = new Size(84, 19);
             chkCallnames.TabIndex = 14;
-            chkCallnames.Text = "CallNames";
+            chkCallnames.Text = "Call names";
             chkCallnames.UseVisualStyleBackColor = true;
+            chkCallnames.Visible = false;
             // 
             // PopUp
             // 
@@ -308,10 +325,11 @@
             toolStripComboBox1.Size = new Size(180, 23);
             toolStripComboBox1.Text = "Relatores FakeYou";
             toolStripComboBox1.SelectedIndexChanged += toolStripComboBox1_SelectedIndexChanged;
+            toolStripComboBox1.Click += toolStripComboBox1_Click;
             // 
             // progressBar1
             // 
-            progressBar1.Location = new Point(460, 318);
+            progressBar1.Location = new Point(348, 318);
             progressBar1.Name = "progressBar1";
             progressBar1.Size = new Size(159, 23);
             progressBar1.TabIndex = 15;
@@ -319,33 +337,94 @@
             // lblContador
             // 
             lblContador.AutoSize = true;
-            lblContador.Location = new Point(724, 41);
+            lblContador.Location = new Point(18, 291);
             lblContador.Name = "lblContador";
-            lblContador.Size = new Size(75, 15);
+            lblContador.Size = new Size(124, 15);
             lblContador.TabIndex = 16;
-            lblContador.Text = "Files counts: ";
+            lblContador.Text = "Cantidad de archivos: ";
             // 
             // lblVAGs
             // 
             lblVAGs.AutoSize = true;
             lblVAGs.Location = new Point(18, 329);
             lblVAGs.Name = "lblVAGs";
-            lblVAGs.Size = new Size(82, 15);
+            lblVAGs.Size = new Size(137, 15);
             lblVAGs.TabIndex = 17;
-            lblVAGs.Text = "VAGs amount:";
+            lblVAGs.Text = "Cantidad de VAGs reales:";
+            // 
+            // rbNormal
+            // 
+            rbNormal.AutoSize = true;
+            rbNormal.Location = new Point(147, 23);
+            rbNormal.Name = "rbNormal";
+            rbNormal.Size = new Size(141, 19);
+            rbNormal.TabIndex = 18;
+            rbNormal.TabStop = true;
+            rbNormal.Text = "Relatos y comentarios";
+            rbNormal.UseVisualStyleBackColor = true;
+            rbNormal.CheckedChanged += rbNormal_CheckedChanged;
+            // 
+            // rbCall1
+            // 
+            rbCall1.AutoSize = true;
+            rbCall1.Location = new Point(358, 23);
+            rbCall1.Name = "rbCall1";
+            rbCall1.Size = new Size(119, 19);
+            rbCall1.TabIndex = 19;
+            rbCall1.TabStop = true;
+            rbCall1.Text = "Call name normal";
+            rbCall1.UseVisualStyleBackColor = true;
+            rbCall1.CheckedChanged += rbCall1_CheckedChanged;
+            // 
+            // rbCall3
+            // 
+            rbCall3.AutoSize = true;
+            rbCall3.Location = new Point(548, 23);
+            rbCall3.Name = "rbCall3";
+            rbCall3.Size = new Size(120, 19);
+            rbCall3.TabIndex = 20;
+            rbCall3.TabStop = true;
+            rbCall3.Text = "Call name exitado";
+            rbCall3.UseVisualStyleBackColor = true;
+            rbCall3.CheckedChanged += rbCall3_CheckedChanged;
+            // 
+            // btnGuardarListado
+            // 
+            btnGuardarListado.Image = Properties.Resources.guardar32x32;
+            btnGuardarListado.Location = new Point(775, 294);
+            btnGuardarListado.Name = "btnGuardarListado";
+            btnGuardarListado.Size = new Size(48, 47);
+            btnGuardarListado.TabIndex = 21;
+            btnGuardarListado.UseVisualStyleBackColor = true;
+            btnGuardarListado.Click += button1_Click_1;
+            // 
+            // btnAbrirlistado
+            // 
+            btnAbrirlistado.Image = Properties.Resources.abrir;
+            btnAbrirlistado.Location = new Point(721, 294);
+            btnAbrirlistado.Name = "btnAbrirlistado";
+            btnAbrirlistado.Size = new Size(48, 47);
+            btnAbrirlistado.TabIndex = 22;
+            btnAbrirlistado.UseVisualStyleBackColor = true;
+            btnAbrirlistado.Click += btnAbrirlistado_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1232, 744);
+            ClientSize = new Size(1232, 743);
+            Controls.Add(btnAbrirlistado);
+            Controls.Add(btnGuardarListado);
+            Controls.Add(rbCall3);
+            Controls.Add(rbCall1);
+            Controls.Add(rbNormal);
             Controls.Add(lblVAGs);
             Controls.Add(lblContador);
             Controls.Add(progressBar1);
             Controls.Add(chkCallnames);
             Controls.Add(btnAdd);
-            Controls.Add(bnProcessData);
-            Controls.Add(listBox1);
+            Controls.Add(btnProcessData);
+            Controls.Add(lstConsola);
             Controls.Add(btnClear);
             Controls.Add(btnDelete);
             Controls.Add(btnDown);
@@ -379,8 +458,8 @@
         private Button btnDown;
         private Button btnDelete;
         private Button btnClear;
-        private ListBox listBox1;
-        private Button bnProcessData;
+        private ListBox lstConsola;
+        private Button btnProcessData;
         private ListBox lstInformacionWAV;
         private Button btnAdd;
         private CheckBox chkCallnames;
@@ -388,12 +467,18 @@
         private ToolStripMenuItem tsMenuCopiar;
         private ToolStripComboBox toolStripComboBox1;
         private ProgressBar progressBar1;
+        private Label lblContador;
+        private Label lblVAGs;
+        private RadioButton rbNormal;
+        private RadioButton rbCall1;
+        private RadioButton rbCall3;
+        private Button btnGuardarListado;
+        private Button btnAbrirlistado;
         private DataGridViewTextBoxColumn colPuntero;
+        private DataGridViewTextBoxColumn colpuntero2;
         private DataGridViewTextBoxColumn colArchivo;
         private DataGridViewTextBoxColumn colFrase;
         private DataGridViewTextBoxColumn colAsignado;
         private DataGridViewCheckBoxColumn colCheckeo;
-        private Label lblContador;
-        private Label lblVAGs;
     }
 }

@@ -1,6 +1,6 @@
-﻿using WE_RA_Maker;
-using System.IO;
-namespace rabulder
+﻿using System.IO;
+using System.Windows;
+namespace fileprcss
 {
     public class Tools_RA
     {
@@ -43,21 +43,21 @@ namespace rabulder
 
         public enum RA_StartLBA : int
         {
-            RA_Start00 = 4608,
-            RA_Start10 = 43008, 
-            RA_Start11 = 043008, 
+            RA_Start00 = 2048,
+            RA_Start10 = 2048, 
+            RA_Start11 = 2048, 
             RA_Start12 = 2048, 
-            RA_Start60 = 47104, 
-            RA_Start61 = 47104,
-            RA_Start62 = 47104, 
-            RA_Start63 = 45056, 
-            RA_Start64 = 45056, 
-            RA_Start65 = 14336,
-            RA_Start70 = 47104, 
-            RA_Start71 = 47104, 
-            RA_Start72 = 47104, 
-            RA_Start73 = 45056, 
-            RA_Start74 = 45056
+            RA_Start60 = 2048, 
+            RA_Start61 = 2048,
+            RA_Start62 = 2048, 
+            RA_Start63 = 2048, 
+            RA_Start64 = 2048, 
+            RA_Start65 = 2048,
+            RA_Start70 = 2048, 
+            RA_Start71 = 2048, 
+            RA_Start72 = 2048, 
+            RA_Start73 = 2048, 
+            RA_Start74 = 2048
         }
 
         // Cantidad de bloques del archivo VAGs
@@ -72,34 +72,34 @@ namespace rabulder
             return (esCallName ? 3 : 1);
         }
 
-        public void CrearArchivosRA(string[] listaOffset, string[] listaDeVags, string folder, bool esCallName)
+        public void CrearArchivosRA(string[] listaOffset, string[] listaOffset2, string[] listaDeVags, string folder, bool esCallName,int indiceRA, int loopRA)
         {
-            string ARCHIVO_RAOO = Application.StartupPath +  "Tools\\W2002J00.RA";
-            int indice = -1;
+           
             int ContadorSize = 0;
             int LBAValue = -1;
             int offset;
             int fileSize = -1;
             int RA_Start = 0;
             byte[] buffer = null;
-            byte[] datosVAG= new byte[4];
+            byte[] datosVAG= new byte[3];
             byte[] dosprimeros = new byte[2];
             byte[] bloque = null;
             int largoTemp = 0;
             int contadorTemp = -1;
             int contadorLista = 0;
             bool terminado = false;
+            StreamWriter writeText = null;
            // Wav2Vag wav2vag = new Wav2Vag();
 
             string[] raFileNames = { "W2002J00.RA", "W2002J10.RA", "W2002J11.RA", "W2002J12.RA", "W2002J60.RA", "W2002J61.RA", "W2002J62.RA", "W2002J63.RA", "W2002J64.RA", "W2002J65.RA", "W2002J70.RA", "W2002J71.RA", "W2002J72.RA", "W2002J73.RA", "W2002J74.RA" };
             try
             {
-                if (!esCallName)
-                {
-                    indice = 1;
-                    while (indice < 4)
+                //if (!esCallName)
+                //{
+                    //indiceRA = 1;
+                    while (indiceRA <= loopRA)
                     {
-                        switch (indice)
+                        switch (indiceRA)
                         {
                             case 0: // RA00
                                 LBAValue = (int)RA_LBA.J00;
@@ -180,8 +180,9 @@ namespace rabulder
                                 break;
                         }
                         terminado = false;
+                        writeText = new StreamWriter(folder + "\\" + raFileNames[indiceRA] + ".txt");
                         // Creamos el RA
-                        using (FileStream fs = new FileStream(folder + "\\" + raFileNames[indice], FileMode.CreateNew, FileAccess.Write))
+                        using (FileStream fs = new FileStream(folder + "\\" + raFileNames[indiceRA], FileMode.CreateNew, FileAccess.Write))
                         {
                             // Comenzamos en el offset con el tamaño adecuado
                             buffer = new byte[RA_Start];
@@ -218,13 +219,13 @@ namespace rabulder
                                         // Escribo el largo del LBA
                                         datosVAG[2] = (byte)ObtenerLargoBloque((int)f.Length);
                                         // Escribo el último Byte
-                                        datosVAG[3] = (byte)ObtenerByteFinal(esCallName);
+                                        //datosVAG[3] = (byte)ObtenerByteFinal(esCallName);
                                         
                                         // Contador temporal del tamaño del RA
                                         contadorTemp = (int)f.Length + ContadorSize;
                                     }
 
-                                    if (contadorTemp > fileSize)
+                                    if (contadorTemp > fileSize || contadorLista >= listaDeVags.Length)
                                     {
                                         int resto = fileSize - (int)fs.Length;
                                         buffer = new byte[resto];
@@ -240,25 +241,39 @@ namespace rabulder
                                     ContadorSize = (int)fs.Length;
                                     }
 
-                                    using (FileStream fsPuntero = new FileStream(ARCHIVO_RAOO, FileMode.Open, FileAccess.Write))
+                                writeText.WriteLine($"{listaOffset[contadorLista]};" + //{BitConverter.ToString(datosVAG, 0)}");
+                                        $"{datosVAG[3].ToString("X2")}" + $"{datosVAG[2].ToString("X2")}" + $"{datosVAG[1].ToString("X2")}" + $"{datosVAG[0].ToString("X2")}");
+                            
+                                using (FileStream fsPuntero = new FileStream(folder + "\\W2002J00.RA", FileMode.Open, FileAccess.Write))
                                     {
                                         // Obtengo el offset del puntero
                                         int offsetPuntero = Convert.ToInt32(listaOffset[contadorLista]);
                                         // Seteo el offset del puntero
                                         fsPuntero.Seek(offsetPuntero, SeekOrigin.Begin);
                                         fsPuntero.Write(datosVAG, 0, datosVAG.Length);
+                                    // Segundo listado de offsets
+                                    if (!string.IsNullOrEmpty(listaOffset2[contadorLista]))
+                                    {
+                                    // Obtengo el offset del puntero
+                                    offsetPuntero = Convert.ToInt32(listaOffset2[contadorLista]);
+                                    // Seteo el offset del puntero
+                                    fsPuntero.Seek(offsetPuntero, SeekOrigin.Begin);
+                                    fsPuntero.Write(datosVAG, 0, datosVAG.Length);
                                     }
+                                }
 
                                 contadorLista++;
                             }
                         }
-                        indice++;
+                        writeText.Close();
+                        indiceRA++;
                     }
-                }
+                //}
+                //File.WriteAllLines()
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                throw new Exception(ex.Message);
             }
             finally { }
         }
