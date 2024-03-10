@@ -332,17 +332,21 @@ namespace Winning_Eleven_2002___RA_Maker
 
             if (rbNormal.Checked)
             {
-                archivo = Application.StartupPath + "Tools\\RelatosComentarios.csv";
+                archivo = Application.StartupPath + "Tools\\W2002 - Relatos.csv";
             }
 
             if (rbCall1.Checked)
             {
-                archivo = Application.StartupPath + "Tools\\CallNames01.csv";
+                archivo = Application.StartupPath + "Tools\\W2002 - CALL01.csv";
             }
 
             if (rbCall3.Checked)
             {
-                archivo = Application.StartupPath + "Tools\\CallNames03.csv";
+                archivo = Application.StartupPath + "Tools\\W2002 - CALL02.csv";
+            }
+            if (rbAll.Checked)
+            {
+                archivo = Application.StartupPath + "Tools\\W2002 - All.csv";
             }
 
             if (string.IsNullOrEmpty(archivo))
@@ -437,7 +441,7 @@ namespace Winning_Eleven_2002___RA_Maker
             FolderBrowserDialog openFolderDialog = new FolderBrowserDialog();
             try
             {
-                if ((!rbNormal.Checked) && (!rbCall1.Checked) && (!rbCall3.Checked))
+                if ((!rbNormal.Checked) && (!rbCall1.Checked) && (!rbCall3.Checked) && (!rbAll.Checked))
                 {
                     MessageBox.Show("Seleccione un tipo de audio.");
                     return;
@@ -470,6 +474,8 @@ namespace Winning_Eleven_2002___RA_Maker
                     if (rbNormal.Checked) { indiceRA = 1; loopRA = 3; }
                     if (rbCall1.Checked) { indiceRA = 4; loopRA = 9; }
                     if (rbCall3.Checked) { indiceRA = 10; loopRA = 14; }
+                    if (rbAll.Checked) { indiceRA = 1;loopRA = 14; }
+
 
                     tools_RA.CrearArchivosRA(listadoPunteros1.ToArray(), listadoPunteros2.ToArray(), listadoDeArchivos.ToArray(), openFolderDialog.SelectedPath, chkCallnames.Checked, indiceRA, loopRA);
                 }
@@ -483,7 +489,7 @@ namespace Winning_Eleven_2002___RA_Maker
                 if (File.Exists(openFolderDialog.SelectedPath + "\\W2002J00.RA"))
                 {
 
-                    File.Copy( openFolderDialog.SelectedPath + "\\W2002J00.RA", Application.StartupPath + "Tools\\W2002J00.RA", true);
+                    File.Copy(openFolderDialog.SelectedPath + "\\W2002J00.RA", Application.StartupPath + "Tools\\W2002J00.RA", true);
                 }
 
 
@@ -584,6 +590,14 @@ namespace Winning_Eleven_2002___RA_Maker
         private void toolStripComboBox1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void rbAll_CheckedChanged(object sender, EventArgs e)
+        {
+            btnAgregarAudio.Enabled = true;
+            btnAbrirlistado.Enabled = true;
+            btnProcessData.Enabled = true;
+            CargarGrilla("Tools\\W2002 - All.csv");
         }
     }
 }

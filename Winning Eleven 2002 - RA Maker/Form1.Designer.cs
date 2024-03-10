@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             lstArchivos = new ListBox();
             dgvVAGs = new DataGridView();
             colPuntero = new DataGridViewTextBoxColumn();
@@ -63,6 +63,7 @@
             rbCall3 = new RadioButton();
             btnGuardarListado = new Button();
             btnAbrirlistado = new Button();
+            rbAll = new RadioButton();
             ((System.ComponentModel.ISupportInitialize)dgvVAGs).BeginInit();
             groupBox1.SuspendLayout();
             PopUp.SuspendLayout();
@@ -82,14 +83,14 @@
             // 
             dgvVAGs.AllowUserToAddRows = false;
             dgvVAGs.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
-            dgvVAGs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            dgvVAGs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvVAGs.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvVAGs.Columns.AddRange(new DataGridViewColumn[] { colPuntero, colpuntero2, colArchivo, colFrase, colAsignado, colCheckeo });
             dgvVAGs.Location = new Point(18, 347);
@@ -408,11 +409,24 @@
             btnAbrirlistado.UseVisualStyleBackColor = true;
             btnAbrirlistado.Click += btnAbrirlistado_Click;
             // 
+            // rbAll
+            // 
+            rbAll.AutoSize = true;
+            rbAll.Location = new Point(721, 23);
+            rbAll.Name = "rbAll";
+            rbAll.Size = new Size(120, 19);
+            rbAll.TabIndex = 23;
+            rbAll.TabStop = true;
+            rbAll.Text = "Call name exitado";
+            rbAll.UseVisualStyleBackColor = true;
+            rbAll.CheckedChanged += rbAll_CheckedChanged;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1232, 743);
+            Controls.Add(rbAll);
             Controls.Add(btnAbrirlistado);
             Controls.Add(btnGuardarListado);
             Controls.Add(rbCall3);
@@ -480,5 +494,6 @@
         private DataGridViewTextBoxColumn colFrase;
         private DataGridViewTextBoxColumn colAsignado;
         private DataGridViewCheckBoxColumn colCheckeo;
+        private RadioButton rbAll;
     }
 }

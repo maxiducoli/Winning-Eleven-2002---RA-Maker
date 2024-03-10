@@ -241,8 +241,9 @@ namespace fileprcss
                                     ContadorSize = (int)fs.Length;
                                     }
 
-                                writeText.WriteLine($"{listaOffset[contadorLista]};" + //{BitConverter.ToString(datosVAG, 0)}");
-                                        $"{datosVAG[3].ToString("X2")}" + $"{datosVAG[2].ToString("X2")}" + $"{datosVAG[1].ToString("X2")}" + $"{datosVAG[0].ToString("X2")}");
+                                writeText.WriteLine($"Offset {raFileNames[indiceRA]}: {listaOffset[contadorLista]};" + //{BitConverter.ToString(datosVAG, 0)}");
+                                         $"Datos VAG: {datosVAG[2].ToString("X2")}" + $"{datosVAG[1].ToString("X2")}" + $"{datosVAG[0].ToString("X2")}" +
+                                         $";Filename: {Path.GetFileNameWithoutExtension(listaDeVags[contadorLista])}");
                             
                                 using (FileStream fsPuntero = new FileStream(folder + "\\W2002J00.RA", FileMode.Open, FileAccess.Write))
                                     {
@@ -261,12 +262,11 @@ namespace fileprcss
                                     fsPuntero.Write(datosVAG, 0, datosVAG.Length);
                                     }
                                 }
-
                                 contadorLista++;
                             }
                         }
-                        writeText.Close();
                         indiceRA++;
+                        writeText.Close();
                     }
                 //}
                 //File.WriteAllLines()
