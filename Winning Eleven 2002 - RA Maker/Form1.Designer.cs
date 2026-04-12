@@ -1,6 +1,6 @@
-﻿namespace Winning_Eleven_2002___RA_Maker
+﻿namespace RaMaker
 {
-    partial class Form1
+    partial class frmRaMaker
     {
         /// <summary>
         ///  Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             lstArchivos = new ListBox();
             dgvVAGs = new DataGridView();
             colPuntero = new DataGridViewTextBoxColumn();
@@ -64,6 +64,9 @@
             btnGuardarListado = new Button();
             btnAbrirlistado = new Button();
             rbAll = new RadioButton();
+            rbHinchadas = new RadioButton();
+            button1 = new Button();
+            rbSilence = new RadioButton();
             ((System.ComponentModel.ISupportInitialize)dgvVAGs).BeginInit();
             groupBox1.SuspendLayout();
             PopUp.SuspendLayout();
@@ -83,14 +86,14 @@
             // 
             dgvVAGs.AllowUserToAddRows = false;
             dgvVAGs.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            dgvVAGs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
+            dgvVAGs.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvVAGs.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvVAGs.Columns.AddRange(new DataGridViewColumn[] { colPuntero, colpuntero2, colArchivo, colFrase, colAsignado, colCheckeo });
             dgvVAGs.Location = new Point(18, 347);
@@ -166,7 +169,7 @@
             // btnCrearRA
             // 
             btnCrearRA.Enabled = false;
-            btnCrearRA.Location = new Point(1145, 671);
+            btnCrearRA.Location = new Point(1145, 661);
             btnCrearRA.Name = "btnCrearRA";
             btnCrearRA.Size = new Size(75, 61);
             btnCrearRA.TabIndex = 3;
@@ -185,7 +188,7 @@
             groupBox1.Size = new Size(337, 282);
             groupBox1.TabIndex = 4;
             groupBox1.TabStop = false;
-            groupBox1.Text = "Información del WAV y reproductor";
+            groupBox1.Text = "Información del audio y reproductor";
             // 
             // lstInformacionWAV
             // 
@@ -222,9 +225,9 @@
             // btnUp
             // 
             btnUp.Image = Properties.Resources._256371;
-            btnUp.Location = new Point(829, 128);
+            btnUp.Location = new Point(829, 63);
             btnUp.Name = "btnUp";
-            btnUp.Size = new Size(48, 47);
+            btnUp.Size = new Size(48, 38);
             btnUp.TabIndex = 5;
             btnUp.UseVisualStyleBackColor = true;
             btnUp.Click += button1_Click;
@@ -232,9 +235,9 @@
             // btnDown
             // 
             btnDown.Image = Properties.Resources.down;
-            btnDown.Location = new Point(829, 181);
+            btnDown.Location = new Point(829, 107);
             btnDown.Name = "btnDown";
-            btnDown.Size = new Size(48, 47);
+            btnDown.Size = new Size(48, 38);
             btnDown.TabIndex = 6;
             btnDown.UseVisualStyleBackColor = true;
             btnDown.Click += button2_Click;
@@ -262,13 +265,12 @@
             // lstConsola
             // 
             lstConsola.BackColor = SystemColors.InfoText;
-            lstConsola.Font = new Font("Itim", 10F);
+            lstConsola.Font = new Font("Microsoft Sans Serif", 10F);
             lstConsola.ForeColor = Color.Lime;
             lstConsola.FormattingEnabled = true;
-            lstConsola.ItemHeight = 15;
             lstConsola.Location = new Point(18, 638);
             lstConsola.Name = "lstConsola";
-            lstConsola.Size = new Size(1121, 94);
+            lstConsola.Size = new Size(1121, 84);
             lstConsola.TabIndex = 11;
             // 
             // btnProcessData
@@ -296,7 +298,7 @@
             // 
             chkCallnames.AutoSize = true;
             chkCallnames.Enabled = false;
-            chkCallnames.Location = new Point(1145, 646);
+            chkCallnames.Location = new Point(1145, 638);
             chkCallnames.Name = "chkCallnames";
             chkCallnames.Size = new Size(84, 19);
             chkCallnames.TabIndex = 14;
@@ -356,7 +358,7 @@
             // rbNormal
             // 
             rbNormal.AutoSize = true;
-            rbNormal.Location = new Point(147, 23);
+            rbNormal.Location = new Point(331, 23);
             rbNormal.Name = "rbNormal";
             rbNormal.Size = new Size(141, 19);
             rbNormal.TabIndex = 18;
@@ -368,7 +370,7 @@
             // rbCall1
             // 
             rbCall1.AutoSize = true;
-            rbCall1.Location = new Point(358, 23);
+            rbCall1.Location = new Point(478, 23);
             rbCall1.Name = "rbCall1";
             rbCall1.Size = new Size(119, 19);
             rbCall1.TabIndex = 19;
@@ -380,9 +382,9 @@
             // rbCall3
             // 
             rbCall3.AutoSize = true;
-            rbCall3.Location = new Point(548, 23);
+            rbCall3.Location = new Point(603, 23);
             rbCall3.Name = "rbCall3";
-            rbCall3.Size = new Size(120, 19);
+            rbCall3.Size = new Size(119, 19);
             rbCall3.TabIndex = 20;
             rbCall3.TabStop = true;
             rbCall3.Text = "Call name exitado";
@@ -412,20 +414,60 @@
             // rbAll
             // 
             rbAll.AutoSize = true;
-            rbAll.Location = new Point(721, 23);
+            rbAll.Location = new Point(729, 23);
             rbAll.Name = "rbAll";
-            rbAll.Size = new Size(120, 19);
+            rbAll.Size = new Size(113, 19);
             rbAll.TabIndex = 23;
             rbAll.TabStop = true;
-            rbAll.Text = "Call name exitado";
+            rbAll.Text = "Todos los audios";
             rbAll.UseVisualStyleBackColor = true;
             rbAll.CheckedChanged += rbAll_CheckedChanged;
             // 
-            // Form1
+            // rbHinchadas
+            // 
+            rbHinchadas.AutoSize = true;
+            rbHinchadas.Location = new Point(970, 23);
+            rbHinchadas.Name = "rbHinchadas";
+            rbHinchadas.Size = new Size(121, 19);
+            rbHinchadas.TabIndex = 24;
+            rbHinchadas.TabStop = true;
+            rbHinchadas.Text = "Canciones tribuna";
+            rbHinchadas.UseVisualStyleBackColor = true;
+            rbHinchadas.Visible = false;
+            rbHinchadas.CheckedChanged += radioButton1_CheckedChanged;
+            // 
+            // button1
+            // 
+            button1.Image = Properties.Resources.audio;
+            button1.Location = new Point(147, 12);
+            button1.Name = "button1";
+            button1.Size = new Size(178, 40);
+            button1.TabIndex = 25;
+            button1.Text = "Optimizar RA existente";
+            button1.TextImageRelation = TextImageRelation.ImageBeforeText;
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click_2;
+            // 
+            // rbSilence
+            // 
+            rbSilence.AutoSize = true;
+            rbSilence.Location = new Point(853, 23);
+            rbSilence.Name = "rbSilence";
+            rbSilence.Size = new Size(111, 19);
+            rbSilence.TabIndex = 26;
+            rbSilence.TabStop = true;
+            rbSilence.Text = "Callar callnames";
+            rbSilence.UseVisualStyleBackColor = true;
+            rbSilence.CheckedChanged += rbSilence_CheckedChanged;
+            // 
+            // frmRaMaker
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1232, 743);
+            Controls.Add(rbSilence);
+            Controls.Add(button1);
+            Controls.Add(rbHinchadas);
             Controls.Add(rbAll);
             Controls.Add(btnAbrirlistado);
             Controls.Add(btnGuardarListado);
@@ -448,7 +490,7 @@
             Controls.Add(btnAgregarAudio);
             Controls.Add(dgvVAGs);
             Controls.Add(lstArchivos);
-            Name = "Form1";
+            Name = "frmRaMaker";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Winning Eleven 2002 - RA Maker -= By CARP =-";
             FormClosing += Form1_FormClosing;
@@ -495,5 +537,8 @@
         private DataGridViewTextBoxColumn colAsignado;
         private DataGridViewCheckBoxColumn colCheckeo;
         private RadioButton rbAll;
+        private RadioButton rbHinchadas;
+        private Button button1;
+        private RadioButton rbSilence;
     }
 }

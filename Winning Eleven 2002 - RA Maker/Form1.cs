@@ -1,19 +1,18 @@
 using System.Diagnostics;
 using System.IO;
 using System.Media;
-using System.Net.Http.Headers;
 using fileprcss;
-using Microsoft.Win32;
+using PS2VagTool;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 using SaveFileDialog = System.Windows.Forms.SaveFileDialog;
 
-namespace Winning_Eleven_2002___RA_Maker
+namespace RaMaker
 {
-    public partial class Form1 : Form
+    public partial class frmRaMaker : Form
     {
         SoundPlayer player;
         int rowIndex = -1;
-        public Form1()
+        public frmRaMaker()
         {
             InitializeComponent();
 
@@ -70,6 +69,7 @@ namespace Winning_Eleven_2002___RA_Maker
         }
         private void CargarArchivosWav()
         {
+            lblContador.Text = string.Empty;
             string[] listaDeArchivos = null;
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
@@ -148,6 +148,7 @@ namespace Winning_Eleven_2002___RA_Maker
         {
             FilePrcss filePrcss = new FilePrcss(Application.StartupPath + "Tools\\MFAudio.exe");
             string tempFolder = Application.StartupPath + "Temp\\";
+            string toolsFolder = Application.StartupPath + "Tools\\";
             string[] listadoNombre = new string[dgvVAGs.RowCount];
             int indice = 0;
             string salida = string.Empty;
@@ -174,15 +175,19 @@ namespace Winning_Eleven_2002___RA_Maker
 
                     if (extension.ToUpper() == ".WAV")
                     {
-                        if (filePrcss.ProcesarArchivo(tempFolder, archivo, listadoNombre[i], chkCallnames.Checked, out salida))
+                        ProgramFunctions.ExecuteEncoder(archivo, tempFolder + "\\" + listadoNombre[i] + ".vag", false, false);
+                        //if (filePrcss.ProcesarArchivo(tempFolder, archivo, listadoNombre[i], chkCallnames.Checked, out salida))
+                        //{
+                        if (File.Exists(tempFolder + "\\" + listadoNombre[i] + ".vag"))
                         {
-                            if (File.Exists(tempFolder + "\\" + listadoNombre[i] + ".vag"))
-                            {
-                                filePrcss.FixVag(tempFolder + "\\" + listadoNombre[i] + ".vag");
-                                if (filePrcss.ConvertirLBA(tempFolder + "\\" + listadoNombre[i] + ".vag", chkCallnames.Checked)) ;
-                            }
+                            filePrcss.FixVag(tempFolder + "\\" + listadoNombre[i] + ".vag");
+                            if (filePrcss.ConvertirLBA(tempFolder + "\\" + listadoNombre[i] + ".vag", chkCallnames.Checked)) ;
+
+                            lstConsola.Items.Add("Archivo procesado correctamente: " + listadoNombre[i]);
                         }
-                        lstConsola.Items.Add(salida);
+                        else
+                            lstConsola.Items.Add("Error al procesar el archivo: " + listadoNombre[i]);
+                        //}
                     }
                     else
                     {
@@ -208,7 +213,7 @@ namespace Winning_Eleven_2002___RA_Maker
                         }
                     }
 
-                    if (!string.IsNullOrEmpty(salida))
+                    if (File.Exists(tempFolder + "\\" + listadoNombre[i] + ".vag"))
                     {
                         if (dgvVAGs.Rows[i].Cells["colArchivo"].Value != "")
                         {
@@ -225,12 +230,22 @@ namespace Winning_Eleven_2002___RA_Maker
                         if (dgvVAGs.Rows[i].Cells["colAsignado"].Value != "")
                             //dgvVAGs.Rows[i].Cells["colEstado"].Value = "ERROR";
                             dgvVAGs.Rows[i].Cells["colCheckeo"].Value = false;
+                        //dgvVAGs.Rows[i].DefaultCellStyle = new DataGridViewCellStyle()
                         //dgvVAGs.Rows[i].Cells["colEstado"].Style.BackColor = Color.Red;
                         //dgvVAGs.Rows[i].Cells["colEstado"].Style.ForeColor = Color.White;
                     }
 
                 }
+                if (progressBar1.Value == progressBar1.Maximum - 1)
+                {
+                    MessageBox.Show("Proceso terminado. Ya está todo preparado para crear sus archivos RA.");
+                }
 
+                if (rbSilence.Checked)
+                {
+                    File.Copy(toolsFolder + "muon.vag", tempFolder + "muon.vag", true);
+                    File.Copy(toolsFolder + "moun.vag", tempFolder + "moun.vag", true);
+                }
             }
             catch (Exception ex)
             {
@@ -270,15 +285,19 @@ namespace Winning_Eleven_2002___RA_Maker
         }
         private void btnPlay_Click(object sender, EventArgs e)
         {
-            if (lstArchivos.Items.Count > 0)
+            if (lstArchivos.SelectedIndex < 0)
             {
-
-                string archivoWav = lstArchivos.SelectedItem.ToString();
-                player = new SoundPlayer();
-                player.SoundLocation = archivoWav;
-                player.Load();
-                player.Play();
+                MessageBox.Show("Seleccione un archivo de su lista para escuchar el audio.");
+                return;
             }
+            string audio = lstArchivos.SelectedItem.ToString();
+
+            if (string.IsNullOrEmpty(audio) || !File.Exists(audio))
+            {
+                MessageBox.Show("El archvo no existe o no es válido.");
+                return;
+            }
+            PlayAudioFiles(audio);
         }
         private void btnStop_Click(object sender, EventArgs e)
         {
@@ -395,18 +414,18 @@ namespace Winning_Eleven_2002___RA_Maker
                 switch (toolStripComboBox1.SelectedIndex)
                 {
                     case 0:
-                        a = "https://fakeyou.com/tts/TM:8hzs5fwhqs75"
+                        a = "https://fakeyou.com/weight/weight_hz7g8f1j4psrsw2sv67e4y61q"
                             ;
                         break;
                     case 1:
-                        a = "https://fakeyou.com/tts/TM:d4989jhcs46z";
+                        a = "https://fakeyou.com/weight/weight_q6fyv0bzhwcsg8ga0asqx5ggy";
 
                         break;
                     case 2:
-                        a = "https://fakeyou.com/tts/TM:b34ppqwan09q";
+                        a = "https://fakeyou.com/weight/weight_cbd84x7kf2ywnse65j5nhnrhd";
                         break;
                     case 3:
-                        a = "https://fakeyou.com/tts/TM:d4hc28vnmz8g";
+                        a = "https://fakeyou.com/weight/weight_ex4b9ba2mrb7hvgh13txtc671";
                         break;
 
                 }
@@ -414,8 +433,8 @@ namespace Winning_Eleven_2002___RA_Maker
                 {
                     Process process = new Process();
                     process.StartInfo.UseShellExecute = true;
-                    process.StartInfo.FileName = "chrome";
-                    process.StartInfo.Arguments = @"a";
+                    process.StartInfo.FileName = a;
+                    //process.StartInfo.Arguments = @a;
                     process.Start();
                 }
             }
@@ -434,14 +453,24 @@ namespace Winning_Eleven_2002___RA_Maker
             int indice = 0;
             int indiceRA = 0;
             int loopRA = 0;
+            bool esHinchada = false;
+
+
             List<string> listadoPunteros1;
             List<string> listadoPunteros2;
             List<string> listadoDeArchivos;
             Tools_RA tools_RA = new Tools_RA();
+            if (rbNormal.Checked) { indiceRA = 1; loopRA = 4; esHinchada = false; }
+            if (rbCall1.Checked) { indiceRA = 4; loopRA = 11; esHinchada = false; }
+            if (rbCall3.Checked) { indiceRA = 10; loopRA = 14; esHinchada = false; }
+            if (rbAll.Checked) { indiceRA = 1; loopRA = 14; esHinchada = false; }
+            if (rbHinchadas.Checked) { indiceRA = 0; loopRA = 1; esHinchada = true; }
+            if (rbSilence.Checked) { indiceRA = 1; loopRA = 14; esHinchada = false; }
+
             FolderBrowserDialog openFolderDialog = new FolderBrowserDialog();
             try
             {
-                if ((!rbNormal.Checked) && (!rbCall1.Checked) && (!rbCall3.Checked) && (!rbAll.Checked))
+                if ((!rbNormal.Checked) && (!rbCall1.Checked) && (!rbCall3.Checked) && (!rbAll.Checked) && (!rbHinchadas.Checked) && (!rbSilence.Checked))
                 {
                     MessageBox.Show("Seleccione un tipo de audio.");
                     return;
@@ -450,7 +479,16 @@ namespace Winning_Eleven_2002___RA_Maker
                 DialogResult result = openFolderDialog.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    File.Copy(Application.StartupPath + "Tools\\W2002J00.RA", openFolderDialog.SelectedPath + "\\W2002J00.RA", true);
+                    if (!esHinchada)
+                    {
+                        File.Copy(Application.StartupPath + "Tools\\W2002J00.RA", openFolderDialog.SelectedPath + "\\W2002J00.RA", true);
+                    }
+                    else
+                    {
+                        File.Copy(Application.StartupPath + "Tools\\SLPM_870.56", openFolderDialog.SelectedPath + "\\SLPM_870.56", true);
+                        File.Copy(Application.StartupPath + "Tools\\W2002J00\\W2002J00.RA", openFolderDialog.SelectedPath + "\\W2002J00.RA", true);
+                    }
+
                     listadoDeArchivos = new List<string>();
                     listadoPunteros1 = new List<string>();
                     listadoPunteros2 = new List<string>();
@@ -471,13 +509,9 @@ namespace Winning_Eleven_2002___RA_Maker
                         //}
                         indice++;
                     }
-                    if (rbNormal.Checked) { indiceRA = 1; loopRA = 3; }
-                    if (rbCall1.Checked) { indiceRA = 4; loopRA = 9; }
-                    if (rbCall3.Checked) { indiceRA = 10; loopRA = 14; }
-                    if (rbAll.Checked) { indiceRA = 1;loopRA = 14; }
 
 
-                    tools_RA.CrearArchivosRA(listadoPunteros1.ToArray(), listadoPunteros2.ToArray(), listadoDeArchivos.ToArray(), openFolderDialog.SelectedPath, chkCallnames.Checked, indiceRA, loopRA);
+                    tools_RA.CrearArchivosRA(listadoPunteros1.ToArray(), listadoPunteros2.ToArray(), listadoDeArchivos.ToArray(), openFolderDialog.SelectedPath, chkCallnames.Checked, indiceRA, loopRA, esHinchada);
                 }
             }
             catch (Exception ex)
@@ -490,8 +524,9 @@ namespace Winning_Eleven_2002___RA_Maker
                 {
 
                     File.Copy(openFolderDialog.SelectedPath + "\\W2002J00.RA", Application.StartupPath + "Tools\\W2002J00.RA", true);
-                }
+                    MessageBox.Show("Archivos creados con éxito en la carpeta: " + openFolderDialog.SelectedPath);
 
+                }
 
             }
         }
@@ -598,6 +633,65 @@ namespace Winning_Eleven_2002___RA_Maker
             btnAbrirlistado.Enabled = true;
             btnProcessData.Enabled = true;
             CargarGrilla("Tools\\W2002 - All.csv");
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            btnAgregarAudio.Enabled = true;
+            btnAbrirlistado.Enabled = true;
+            btnProcessData.Enabled = true;
+            CargarGrilla("Tools\\W2002 - Hinchadas.csv");
+        }
+
+        private void PlayAudioFiles(string audioFile)
+        {
+            string tempAudioFile = Path.ChangeExtension(Path.GetTempFileName(), ".WAV");
+            try
+            {
+                if (lstArchivos.Items.Count > 0)
+                {
+
+                    if (Path.GetExtension(audioFile).ToUpper() == ".WAV")
+                    {
+                        player = new SoundPlayer();
+                        player.SoundLocation = audioFile;
+                        player.Load();
+                        player.Play();
+                    }
+                    else if (Path.GetExtension(audioFile).ToUpper() == ".VAG")
+                    {
+                        ProgramFunctions.ExecuteDecoder(audioFile, tempAudioFile);
+
+                        if (File.Exists(tempAudioFile))
+                        {
+                            player = new SoundPlayer();
+                            player.SoundLocation = tempAudioFile;
+                            player.Load();
+                            player.Play();
+                        }
+                    }
+                    else
+                        MessageBox.Show("Archivo de audio no soportado");
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void rbSilence_CheckedChanged(object sender, EventArgs e)
+        {
+            btnAgregarAudio.Enabled = true;
+            btnAbrirlistado.Enabled = true;
+            btnProcessData.Enabled = true;
+            CargarGrilla("Tools\\W2002 - CALL03.csv");
+        }
+
+        private void button1_Click_2(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -6,10 +6,10 @@ namespace fileprcss
     {
         private readonly string ejecutablePath;
 
-        public FilePrcss()
-        {
+        //public FilePrcss()
+        //{
           
-        }
+        //}
 
         public FilePrcss(string filename)
             {
@@ -140,7 +140,7 @@ namespace fileprcss
             }
             catch (Exception ex)
             {
-                
+                throw new Exception(ex.Message);
             }
             return resutl;
         }

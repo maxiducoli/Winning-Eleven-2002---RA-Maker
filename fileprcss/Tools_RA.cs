@@ -43,7 +43,7 @@ namespace fileprcss
 
         public enum RA_StartLBA : int
         {
-            RA_Start00 = 2048,
+            RA_Start00 = 411648,
             RA_Start10 = 2048, 
             RA_Start11 = 2048, 
             RA_Start12 = 2048, 
@@ -72,210 +72,483 @@ namespace fileprcss
             return (esCallName ? 3 : 1);
         }
 
-        public void CrearArchivosRA(string[] listaOffset, string[] listaOffset2, string[] listaDeVags, string folder, bool esCallName,int indiceRA, int loopRA)
-        {
-           
-            int ContadorSize = 0;
-            int LBAValue = -1;
-            int offset;
-            int fileSize = -1;
-            int RA_Start = 0;
-            byte[] buffer = null;
-            byte[] datosVAG= new byte[3];
-            byte[] dosprimeros = new byte[2];
-            byte[] bloque = null;
-            int largoTemp = 0;
-            int contadorTemp = -1;
-            int contadorLista = 0;
-            bool terminado = false;
-            StreamWriter writeText = null;
-           // Wav2Vag wav2vag = new Wav2Vag();
-
-            string[] raFileNames = { "W2002J00.RA", "W2002J10.RA", "W2002J11.RA", "W2002J12.RA", "W2002J60.RA", "W2002J61.RA", "W2002J62.RA", "W2002J63.RA", "W2002J64.RA", "W2002J65.RA", "W2002J70.RA", "W2002J71.RA", "W2002J72.RA", "W2002J73.RA", "W2002J74.RA" };
-            try
+       
+            public void CrearArchivosRA(string[] listaOffset, string[] listaOffset2, string[] listaDeVags, string folder, bool esCallName,int indiceRA, int loopRA, bool esHinchada)
             {
-                //if (!esCallName)
-                //{
-                    //indiceRA = 1;
-                    while (indiceRA <= loopRA)
-                    {
-                        switch (indiceRA)
+
+                int ContadorSize = 0;
+                int LBAValue = -1;
+                int offset;
+                int fileSize = -1;
+                int RA_Start = 0;
+                byte[] buffer = null;
+                byte[] datosVAG= new byte[3];
+                byte[] dosprimeros = new byte[2];
+                byte[] bloque = null;
+                int largoTemp = 0;
+                int contadorTemp = -1;
+                int contadorLista = 0;
+                bool terminado = false;
+                StreamWriter writeText = null;
+                string archivoEscrito = string.Empty;
+
+                if (esHinchada)
+                {
+                    archivoEscrito = "SLPM_870.56";
+                }
+                else
+                {
+                    archivoEscrito = "W2002J00.RA";
+                }
+               // Wav2Vag wav2vag = new Wav2Vag();
+
+                string[] raFileNames = { "W2002J00.RA", "W2002J10.RA", "W2002J11.RA", "W2002J12.RA", "W2002J60.RA", "W2002J61.RA", "W2002J62.RA", "W2002J63.RA", "W2002J64.RA", "W2002J65.RA", "W2002J70.RA", "W2002J71.RA", "W2002J72.RA", "W2002J73.RA", "W2002J74.RA" };
+                try
+                {
+                    //if (!esCallName)
+                    //{
+                        //indiceRA = 1;
+                        while (indiceRA <= loopRA)
                         {
-                            case 0: // RA00
-                                LBAValue = (int)RA_LBA.J00;
-                                fileSize = (int)RASize.W2002J00;
-                                RA_Start = (int)RA_StartLBA.RA_Start00;
-                                break;
-                            case 1: // RA10
-                                LBAValue = (int)RA_LBA.J10;
-                                fileSize = (int)RASize.W2002J10;
-                                RA_Start = (int)RA_StartLBA.RA_Start10;
-                                break;
-                            case 2: // RA11
-                                LBAValue = (int)RA_LBA.J11;
-                                fileSize = (int)RASize.W2002J11;
-                                RA_Start = (int)RA_StartLBA.RA_Start11;
-                                break;
-                            case 3: // RA12
-                                LBAValue = (int)RA_LBA.J12;
-                                fileSize = (int)RASize.W2002J12;
-                                RA_Start = (int)RA_StartLBA.RA_Start12;
-                                break;
-                            case 4: //RA60
-                                LBAValue = (int)RA_LBA.J60;
-                                fileSize = (int)RASize.W2002J60;
-                                RA_Start = (int)RA_StartLBA.RA_Start60;
-                                break;
-                            case 5: //RA61
-                                LBAValue = (int)RA_LBA.J61;
-                                fileSize = (int)RASize.W2002J61;
-                                RA_Start = (int)RA_StartLBA.RA_Start61;
-                                break;
-                            case 6: // RA62
-                                LBAValue = (int)RA_LBA.J62;
-                                fileSize = (int)RASize.W2002J62;
-                                RA_Start = (int)RA_StartLBA.RA_Start62;
-                                break;
-                            case 7: // RA63
-                                LBAValue = (int)RA_LBA.J63;
-                                fileSize = (int)RASize.W2002J63;
-                                RA_Start = (int)RA_StartLBA.RA_Start63;
-                                break;
-                            case 8: // RA64
-                                LBAValue = (int)RA_LBA.J64;
-                                fileSize = (int)RASize.W2002J64;
-                                RA_Start = (int)RA_StartLBA.RA_Start64;
-                                break;
-                            case 9: // RA65
-                                LBAValue = (int)RA_LBA.J65;
-                                fileSize = (int)RASize.W2002J65;
-                                RA_Start = (int)RA_StartLBA.RA_Start65;
-                                break;
-                            case 10: // RA70
-                                LBAValue = (int)RA_LBA.J70;
-                                fileSize = (int)RASize.W2002J70;
-                                RA_Start = (int)RA_StartLBA.RA_Start70;
-                                break;
-                            case 11: // RA71
-                                LBAValue = (int)RA_LBA.J71;
-                                fileSize = (int)RASize.W2002J71;
-                                RA_Start = (int)RA_StartLBA.RA_Start71;
-                                break;
-                            case 12: // RA72
-                                LBAValue = (int)RA_LBA.J72;
-                                fileSize = (int)RASize.W2002J72;
-                                RA_Start = (int)RA_StartLBA.RA_Start72;
-                                break;
-                            case 13: // RA73
-                                LBAValue = (int)RA_LBA.J73;
-                                fileSize = (int)RASize.W2002J73;
-                                RA_Start = (int)RA_StartLBA.RA_Start73;
-                                break;
-                            case 14: // RA74
-                                LBAValue = (int)RA_LBA.J74;
-                                fileSize = (int)RASize.W2002J74;
-                                RA_Start = (int)RA_StartLBA.RA_Start74;
-                                break;
-                            default:
-                                break;
-                        }
-                        terminado = false;
-                        writeText = new StreamWriter(folder + "\\" + raFileNames[indiceRA] + ".txt");
-                        // Creamos el RA
-                        using (FileStream fs = new FileStream(folder + "\\" + raFileNames[indiceRA], FileMode.CreateNew, FileAccess.Write))
-                        {
-                            // Comenzamos en el offset con el tamaño adecuado
-                            buffer = new byte[RA_Start];
-                            offset = buffer.Length;
-                            fs.Seek(0, SeekOrigin.Begin);
-
-                            // Escribimos el comienzo del archivo RA con ceros.
-                            fs.Write(buffer, 0, buffer.Length);
-
-                            // Offset del archivo.
-                            offset = (int)fs.Length;
-
-                            // Contador de tamaño del archivo creado.
-                            ContadorSize = (int)fs.Length;
-
-                            // Comenzamos a leer los VAGs y a convertir su tamaño
-                            while (!terminado)
+                            switch (indiceRA)
                             {
-                                    // Abrimos el archivo recién convertido para leer
-                                    using (FileStream f = new FileStream(listaDeVags[contadorLista], FileMode.Open, FileAccess.Read))
-                                    {
-                                        // Seteamos el buffer y leemos el nuevo VAG.
-                                        buffer = new byte[(int)f.Length];
-                                        f.Seek(0, SeekOrigin.Begin);
-                                        f.Read(buffer, 0, buffer.Length);
+                                case 0: // RA00
+                                    LBAValue = (int)RA_LBA.J00;
+                                    fileSize = (int)RASize.W2002J00;
+                                    RA_Start = (int)RA_StartLBA.RA_Start00;
+                                    break;
+                                case 1: // RA10
+                                    LBAValue = (int)RA_LBA.J10;
+                                    fileSize = (int)RASize.W2002J10;
+                                    RA_Start = (int)RA_StartLBA.RA_Start10;
+                                    break;
+                                case 2: // RA11
+                                    LBAValue = (int)RA_LBA.J11;
+                                    fileSize = (int)RASize.W2002J11;
+                                    RA_Start = (int)RA_StartLBA.RA_Start11;
+                                    break;
+                                case 3: // RA12
+                                    LBAValue = (int)RA_LBA.J12;
+                                    fileSize = (int)RASize.W2002J12;
+                                    RA_Start = (int)RA_StartLBA.RA_Start12;
+                                    break;
+                                case 4: //RA60
+                                    LBAValue = (int)RA_LBA.J60;
+                                    fileSize = (int)RASize.W2002J60;
+                                    RA_Start = (int)RA_StartLBA.RA_Start60;
+                                    break;
+                                case 5: //RA61
+                                    LBAValue = (int)RA_LBA.J61;
+                                    fileSize = (int)RASize.W2002J61;
+                                    RA_Start = (int)RA_StartLBA.RA_Start61;
+                                    break;
+                                case 6: // RA62
+                                    LBAValue = (int)RA_LBA.J62;
+                                    fileSize = (int)RASize.W2002J62;
+                                    RA_Start = (int)RA_StartLBA.RA_Start62;
+                                    break;
+                                case 7: // RA63
+                                    LBAValue = (int)RA_LBA.J63;
+                                    fileSize = (int)RASize.W2002J63;
+                                    RA_Start = (int)RA_StartLBA.RA_Start63;
+                                    break;
+                                case 8: // RA64
+                                    LBAValue = (int)RA_LBA.J64;
+                                    fileSize = (int)RASize.W2002J64;
+                                    RA_Start = (int)RA_StartLBA.RA_Start64;
+                                    break;
+                                case 9: // RA65
+                                    LBAValue = (int)RA_LBA.J65;
+                                    fileSize = (int)RASize.W2002J65;
+                                    RA_Start = (int)RA_StartLBA.RA_Start65;
+                                    break;
+                                case 10: // RA70
+                                    LBAValue = (int)RA_LBA.J70;
+                                    fileSize = (int)RASize.W2002J70;
+                                    RA_Start = (int)RA_StartLBA.RA_Start70;
+                                    break;
+                                case 11: // RA71
+                                    LBAValue = (int)RA_LBA.J71;
+                                    fileSize = (int)RASize.W2002J71;
+                                    RA_Start = (int)RA_StartLBA.RA_Start71;
+                                    break;
+                                case 12: // RA72
+                                    LBAValue = (int)RA_LBA.J72;
+                                    fileSize = (int)RASize.W2002J72;
+                                    RA_Start = (int)RA_StartLBA.RA_Start72;
+                                    break;
+                                case 13: // RA73
+                                    LBAValue = (int)RA_LBA.J73;
+                                    fileSize = (int)RASize.W2002J73;
+                                    RA_Start = (int)RA_StartLBA.RA_Start73;
+                                    break;
+                                case 14: // RA74
+                                    LBAValue = (int)RA_LBA.J74;
+                                    fileSize = (int)RASize.W2002J74;
+                                    RA_Start = (int)RA_StartLBA.RA_Start74;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            terminado = false;
+                            writeText = new StreamWriter(folder + "\\" + raFileNames[indiceRA] + ".txt");
+                        // Creamos el RA
+                        string RA00 = string.Empty;
+                        FileStream fs = null;
+                        if (esHinchada)
+                        {
+                            RA00= folder + "\\" + raFileNames[indiceRA];
+                            fs = new FileStream(RA00, FileMode.Append, FileAccess.Write);
+                        }
+                        else
+                        {
+                            RA00= folder + "\\" + raFileNames[indiceRA];
+                            fs = new FileStream(RA00, FileMode.CreateNew, FileAccess.Write);
+                        }
 
-                                        // Leemos el largo del archivo y lo convertimos en LBA
-                                        largoTemp = ObtenerLargoBloque((int)fs.Length) + LBAValue;
 
-                                        // Guardo los dos bytes del puntero
-                                        dosprimeros = BitConverter.GetBytes(largoTemp);
-                                        // Guardo en el array a escribir
-                                        Array.Copy(dosprimeros, datosVAG, 2);
-                                        // Escribo el largo del LBA
-                                        datosVAG[2] = (byte)ObtenerLargoBloque((int)f.Length);
-                                        // Escribo el último Byte
-                                        //datosVAG[3] = (byte)ObtenerByteFinal(esCallName);
-                                        
-                                        // Contador temporal del tamaño del RA
-                                        contadorTemp = (int)f.Length + ContadorSize;
-                                    }
+                        using (fs)
+                            {
 
-                                    if (contadorTemp > fileSize || contadorLista >= listaDeVags.Length)
-                                    {
-                                        int resto = fileSize - (int)fs.Length;
-                                        buffer = new byte[resto];
-                                        fs.Write(buffer, 0, resto);
-                                        terminado = true;
-                                        break;
-                                    }
-                                    else
-                                    {
-                                    // Escribimos el VAG en el RA nuevo
-                                    fs.Write(buffer, 0, buffer.Length);
-                                    // Contador de tamaño del archivo creado.
-                                    ContadorSize = (int)fs.Length;
-                                    }
+                            if (!esHinchada)
+                            {
+                                // Comenzamos en el offset con el tamaño adecuado
+                                buffer = new byte[RA_Start];
+                                offset = buffer.Length;
+                                fs.Seek(0, SeekOrigin.Begin);
 
-                                writeText.WriteLine($"Offset {raFileNames[indiceRA]}: {listaOffset[contadorLista]};" + //{BitConverter.ToString(datosVAG, 0)}");
-                                         $"Datos VAG: {datosVAG[2].ToString("X2")}" + $"{datosVAG[1].ToString("X2")}" + $"{datosVAG[0].ToString("X2")}" +
-                                         $";Filename: {Path.GetFileNameWithoutExtension(listaDeVags[contadorLista])}");
-                            
-                                using (FileStream fsPuntero = new FileStream(folder + "\\W2002J00.RA", FileMode.Open, FileAccess.Write))
-                                    {
+                                // Escribimos el comienzo del archivo RA con ceros.
+                                fs.Write(buffer, 0, buffer.Length);
+                            }
+                            else
+                            {
+                                buffer = new byte[RA_Start];
+                                offset = buffer.Length;
+                                // Escribimos el comienzo del archivo RA con ceros.
+                                fs.Write(buffer, 0, buffer.Length);
+                            }
+
+                                // Offset del archivo.
+                                offset = (int)fs.Length;
+
+                                // Contador de tamaño del archivo creado.
+                                ContadorSize = (int)fs.Length;
+
+                                // Comenzamos a leer los VAGs y a convertir su tamaño
+                                while (!terminado)
+                                {
+                                        // Abrimos el archivo recién convertido para leer
+                                        using (FileStream f = new FileStream(listaDeVags[contadorLista], FileMode.Open, FileAccess.Read))
+                                        {
+                                            // Seteamos el buffer y leemos el nuevo VAG.
+                                            buffer = new byte[(int)f.Length];
+                                            f.Seek(0, SeekOrigin.Begin);
+                                            f.Read(buffer, 0, buffer.Length);
+
+                                            // Leemos el largo del archivo y lo convertimos en LBA
+                                            largoTemp = ObtenerLargoBloque((int)fs.Length) + LBAValue;
+
+                                            // Guardo los dos bytes del puntero
+                                            dosprimeros = BitConverter.GetBytes(largoTemp);
+                                            // Guardo en el array a escribir
+                                            Array.Copy(dosprimeros, datosVAG, 2);
+                                            // Escribo el largo del LBA
+                                            datosVAG[2] = (byte)ObtenerLargoBloque((int)f.Length);
+                                            // Escribo el último Byte
+                                            //datosVAG[3] = (byte)ObtenerByteFinal(esCallName);
+
+                                            // Contador temporal del tamaño del RA
+                                            contadorTemp = (int)f.Length + ContadorSize;
+                                        }
+
+                                        if (contadorTemp > fileSize || contadorLista >= listaDeVags.Length)
+                                        {
+                                            int resto = fileSize - (int)fs.Length;
+                                            buffer = new byte[resto];
+                                            fs.Write(buffer, 0, resto);
+                                            terminado = true;
+                                            break;
+                                        }
+                                        else
+                                        {
+                                        // Escribimos el VAG en el RA nuevo
+                                        fs.Write(buffer, 0, buffer.Length);
+                                        // Contador de tamaño del archivo creado.
+                                        ContadorSize = (int)fs.Length;
+                                        }
+
+                                    writeText.WriteLine($"Offset {raFileNames[indiceRA]}: {listaOffset[contadorLista]};" + //{BitConverter.ToString(datosVAG, 0)}");
+                                             $"Datos VAG: {datosVAG[2].ToString("X2")}" + $"{datosVAG[1].ToString("X2")}" + $"{datosVAG[0].ToString("X2")}" +
+                                             $";Filename: {Path.GetFileNameWithoutExtension(listaDeVags[contadorLista])}");
+
+                                    using (FileStream fsPuntero = new FileStream(folder + $"\\{archivoEscrito}"  , FileMode.Open, FileAccess.Write))
+                                        {
+                                            // Obtengo el offset del puntero
+                                            int offsetPuntero = Convert.ToInt32(listaOffset[contadorLista]);
+                                            // Seteo el offset del puntero
+                                            fsPuntero.Seek(offsetPuntero, SeekOrigin.Begin);
+                                            fsPuntero.Write(datosVAG, 0, datosVAG.Length);
+                                        // Segundo listado de offsets
+                                        if (!string.IsNullOrEmpty(listaOffset2[contadorLista]))
+                                        {
                                         // Obtengo el offset del puntero
-                                        int offsetPuntero = Convert.ToInt32(listaOffset[contadorLista]);
+                                        offsetPuntero = Convert.ToInt32(listaOffset2[contadorLista]);
                                         // Seteo el offset del puntero
                                         fsPuntero.Seek(offsetPuntero, SeekOrigin.Begin);
                                         fsPuntero.Write(datosVAG, 0, datosVAG.Length);
-                                    // Segundo listado de offsets
-                                    if (!string.IsNullOrEmpty(listaOffset2[contadorLista]))
-                                    {
-                                    // Obtengo el offset del puntero
-                                    offsetPuntero = Convert.ToInt32(listaOffset2[contadorLista]);
-                                    // Seteo el offset del puntero
-                                    fsPuntero.Seek(offsetPuntero, SeekOrigin.Begin);
-                                    fsPuntero.Write(datosVAG, 0, datosVAG.Length);
+                                        }
                                     }
+                                    contadorLista++;
                                 }
-                                contadorLista++;
                             }
+                            indiceRA++;
+                            writeText.Close();
                         }
-                        indiceRA++;
-                        writeText.Close();
+                    //}
+                    //File.WriteAllLines()
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                finally { }
+            }
+        
+
+/*
+        public void CrearArchivosRA(string[] listaOffset, string[] listaOffset2, string[] listaDeVags, string folder, bool esCallName, int indiceRA, int loopRA, bool esHinchada)
+        {
+            int contadorSize = 0;
+            int lbaValue = -1;
+            int fileSize = -1;
+            int raStart = 0;
+            byte[] buffer = null;
+            int contadorLista = 0;
+            bool terminado = false;
+            string archivoEscrito = esHinchada ? "SLPM_870.56" : "W2002J00.RA";
+
+            string[] raFileNames = {
+        "W2002J00.RA", "W2002J10.RA", "W2002J11.RA", "W2002J12.RA", "W2002J60.RA",
+        "W2002J61.RA", "W2002J62.RA", "W2002J63.RA", "W2002J64.RA", "W2002J65.RA",
+        "W2002J70.RA", "W2002J71.RA", "W2002J72.RA", "W2002J73.RA", "W2002J74.RA"
+    };
+
+            try
+            {
+                while (indiceRA <= loopRA)
+                {
+                    // Obtener los valores de LBA, fileSize y RA_Start en función del índice
+                    ObtenerParametrosRA(indiceRA, ref lbaValue, ref fileSize, ref raStart);
+                    terminado = false;
+
+                    string raFileName = Path.Combine(folder, raFileNames[indiceRA]);
+                    string logFileName = raFileName + ".txt";
+
+                    using (var writeText = new StreamWriter(logFileName))
+                    using (var fs = new FileStream(raFileName, esHinchada ? FileMode.Append : FileMode.CreateNew, FileAccess.Write))
+                    {
+                        // Inicialización del archivo con ceros al inicio
+                        buffer = new byte[raStart];
+                        fs.Write(buffer, 0, buffer.Length);
+
+                        contadorSize = raStart;
+
+                        // Proceso de lectura y escritura de VAGs
+                        while (!terminado)
+                        {
+                            if (contadorLista >= listaDeVags.Length)
+                            {
+                                throw new Exception("Lista de VAGs no contiene suficientes elementos.");
+                            }
+
+                            string vagFile = listaDeVags[contadorLista];
+                            byte[] vagData = LeerVAG(vagFile);
+                            int largoTemp = ObtenerLargoBloque((int)fs.Length) + lbaValue;
+
+                            // Generación de los datos VAG
+                            byte[] datosVAG = CrearDatosVAG(largoTemp, vagData.Length);
+
+                            // Verificar si el archivo RA excede su tamaño
+                            if (contadorSize + vagData.Length > fileSize)
+                            {
+                                RellenarRestante(fs, fileSize - (int)fs.Length);
+                                terminado = true;
+                            }
+                            else
+                            {
+                                fs.Write(vagData, 0, vagData.Length);
+                                contadorSize += vagData.Length;
+                            }
+
+                            // Escritura en el archivo de log
+                            EscribirLog(writeText, raFileNames[indiceRA], listaOffset[contadorLista], datosVAG, vagFile);
+
+                            // Escritura de punteros en el archivo de destino
+                            EscribirPunteros(folder, archivoEscrito, listaOffset[contadorLista], listaOffset2[contadorLista], datosVAG);
+
+                            contadorLista++;
+                        }
                     }
-                //}
-                //File.WriteAllLines()
+
+                    indiceRA++;
+                }
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception($"Error al crear archivos RA: {ex.Message}", ex);
             }
-            finally { }
         }
+
+        /// <summary>
+        /// Obtiene los parámetros LBA, fileSize y RA_Start según el índice RA.
+        /// </summary>
+        private void ObtenerParametrosRA(int indiceRA, ref int lbaValue, ref int fileSize, ref int raStart)
+        {
+            switch (indiceRA)
+            {
+                case 0: // RA00
+                    lbaValue = (int)RA_LBA.J00;
+                    fileSize = (int)RASize.W2002J00;
+                    raStart = (int)RA_StartLBA.RA_Start00;
+                    break;
+                case 1: // RA10
+                    lbaValue = (int)RA_LBA.J10;
+                    fileSize = (int)RASize.W2002J10;
+                    raStart = (int)RA_StartLBA.RA_Start10;
+                    break;
+                case 2: // RA11
+                    lbaValue = (int)RA_LBA.J11;
+                    fileSize = (int)RASize.W2002J11;
+                    raStart = (int)RA_StartLBA.RA_Start11;
+                    break;
+                case 3: // RA12
+                    lbaValue = (int)RA_LBA.J12;
+                    fileSize = (int)RASize.W2002J12;
+                    raStart = (int)RA_StartLBA.RA_Start12;
+                    break;
+                case 4: //RA60
+                    lbaValue = (int)RA_LBA.J60;
+                    fileSize = (int)RASize.W2002J60;
+                    raStart = (int)RA_StartLBA.RA_Start60;
+                    break;
+                case 5: //RA61
+                    lbaValue = (int)RA_LBA.J61;
+                    fileSize = (int)RASize.W2002J61;
+                    raStart = (int)RA_StartLBA.RA_Start61;
+                    break;
+                case 6: // RA62
+                    lbaValue = (int)RA_LBA.J62;
+                    fileSize = (int)RASize.W2002J62;
+                    raStart = (int)RA_StartLBA.RA_Start62;
+                    break;
+                case 7: // RA63
+                    lbaValue = (int)RA_LBA.J63;
+                    fileSize = (int)RASize.W2002J63;
+                    raStart = (int)RA_StartLBA.RA_Start63;
+                    break;
+                case 8: // RA64
+                    lbaValue = (int)RA_LBA.J64;
+                    fileSize = (int)RASize.W2002J64;
+                    raStart = (int)RA_StartLBA.RA_Start64;
+                    break;
+                case 9: // RA65
+                    lbaValue = (int)RA_LBA.J65;
+                    fileSize = (int)RASize.W2002J65;
+                    raStart = (int)RA_StartLBA.RA_Start65;
+                    break;
+                case 10: // RA70
+                    lbaValue = (int)RA_LBA.J70;
+                    fileSize = (int)RASize.W2002J70;
+                    raStart = (int)RA_StartLBA.RA_Start70;
+                    break;
+                case 11: // RA71
+                    lbaValue = (int)RA_LBA.J71;
+                    fileSize = (int)RASize.W2002J71;
+                    raStart = (int)RA_StartLBA.RA_Start71;
+                    break;
+                case 12: // RA72
+                    lbaValue = (int)RA_LBA.J72;
+                    fileSize = (int)RASize.W2002J72;
+                    raStart = (int)RA_StartLBA.RA_Start72;
+                    break;
+                case 13: // RA73
+                    lbaValue = (int)RA_LBA.J73;
+                    fileSize = (int)RASize.W2002J73;
+                    raStart = (int)RA_StartLBA.RA_Start73;
+                    break;
+                case 14: // RA74
+                    lbaValue = (int)RA_LBA.J74;
+                    fileSize = (int)RASize.W2002J74;
+                    raStart = (int)RA_StartLBA.RA_Start74;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Lee un archivo VAG y retorna sus datos como un array de bytes.
+        /// </summary>
+        private byte[] LeerVAG(string vagFile)
+        {
+            using (FileStream f = new FileStream(vagFile, FileMode.Open, FileAccess.Read))
+            {
+                byte[] buffer = new byte[f.Length];
+                f.Read(buffer, 0, buffer.Length);
+                return buffer;
+            }
+        }
+
+        /// <summary>
+        /// Crea los datos VAG en formato adecuado.
+        /// </summary>
+        private byte[] CrearDatosVAG(int largoTemp, int vagLength)
+        {
+            byte[] datosVAG = new byte[3];
+            byte[] dosprimeros = BitConverter.GetBytes(largoTemp);
+
+            Array.Copy(dosprimeros, datosVAG, 2);
+            datosVAG[2] = (byte)ObtenerLargoBloque(vagLength);
+
+            return datosVAG;
+        }
+
+        /// <summary>
+        /// Rellena el archivo RA con ceros hasta completar el tamaño deseado.
+        /// </summary>
+        private void RellenarRestante(FileStream fs, int resto)
+        {
+            byte[] buffer = new byte[resto];
+            fs.Write(buffer, 0, buffer.Length);
+        }
+
+        /// <summary>
+        /// Escribe la información de logs para un archivo RA.
+        /// </summary>
+        private void EscribirLog(StreamWriter writeText, string raFileName, string offset, byte[] datosVAG, string vagFile)
+        {
+            writeText.WriteLine($"Offset {raFileName}: {offset}; Datos VAG: {BitConverter.ToString(datosVAG)}; Filename: {Path.GetFileNameWithoutExtension(vagFile)}");
+        }
+
+        /// <summary>
+        /// Escribe los punteros en los offsets correspondientes en el archivo de destino.
+        /// </summary>
+        private void EscribirPunteros(string folder, string archivoEscrito, string offset, string offset2, byte[] datosVAG)
+        {
+            using (var fsPuntero = new FileStream(Path.Combine(folder, archivoEscrito), FileMode.Open, FileAccess.Write))
+            {
+                int offsetPuntero = Convert.ToInt32(offset);
+                fsPuntero.Seek(offsetPuntero, SeekOrigin.Begin);
+                fsPuntero.Write(datosVAG, 0, datosVAG.Length);
+
+                if (!string.IsNullOrEmpty(offset2))
+                {
+                    offsetPuntero = Convert.ToInt32(offset2);
+                    fsPuntero.Seek(offsetPuntero, SeekOrigin.Begin);
+                    fsPuntero.Write(datosVAG, 0, datosVAG.Length);
+                }
+            }
+        }
+        */
     }
 }

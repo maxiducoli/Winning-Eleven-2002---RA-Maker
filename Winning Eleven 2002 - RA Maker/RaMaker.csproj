@@ -3,16 +3,18 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
-    <RootNamespace>Winning_Eleven_2002___RA_Maker</RootNamespace>
+    <RootNamespace>RaMaker</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWindowsForms>True</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <StartupObject>Winning_Eleven_2002___RA_Maker.Program</StartupObject>
+    
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
     <UseWPF>True</UseWPF>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\es-ps2-vag-tool-main\PS2VagTool\PS2VagTool.csproj" />
     <ProjectReference Include="..\fileprcss\fileprcss.csproj" />
   </ItemGroup>
 
